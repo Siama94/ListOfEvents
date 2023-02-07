@@ -54,14 +54,46 @@
 		559752E629926A1F000AB411 /* ListOfEvents */ = {
 			isa = PBXGroup;
 			children = (
-				559752E729926A1F000AB411 /* AppDelegate.swift */,
-				559752E929926A1F000AB411 /* SceneDelegate.swift */,
-				559752EB29926A1F000AB411 /* ViewController.swift */,
-				559752F029926A20000AB411 /* Assets.xcassets */,
-				559752F229926A20000AB411 /* LaunchScreen.storyboard */,
 				559752F529926A20000AB411 /* Info.plist */,
+				5597530029927297000AB411 /* Resources */,
+				55975301299272BD000AB411 /* Sources */,
 			);
 			path = ListOfEvents;
+			sourceTree = "<group>";
+		};
+		5597530029927297000AB411 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				559752F229926A20000AB411 /* LaunchScreen.storyboard */,
+				559752F029926A20000AB411 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		55975301299272BD000AB411 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				55975303299272E9000AB411 /* Modules */,
+				55975302299272D5000AB411 /* App */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		55975302299272D5000AB411 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				559752E729926A1F000AB411 /* AppDelegate.swift */,
+				559752E929926A1F000AB411 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		55975303299272E9000AB411 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				559752EB29926A1F000AB411 /* ViewController.swift */,
+			);
+			path = Modules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
