@@ -9,9 +9,12 @@
 /* Begin PBXBuildFile section */
 		559752E829926A1F000AB411 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559752E729926A1F000AB411 /* AppDelegate.swift */; };
 		559752EA29926A1F000AB411 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559752E929926A1F000AB411 /* SceneDelegate.swift */; };
-		559752EC29926A1F000AB411 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559752EB29926A1F000AB411 /* ViewController.swift */; };
+		559752EC29926A1F000AB411 /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559752EB29926A1F000AB411 /* ListEventsViewController.swift */; };
 		559752F129926A20000AB411 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 559752F029926A20000AB411 /* Assets.xcassets */; };
 		559752F429926A20000AB411 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 559752F229926A20000AB411 /* LaunchScreen.storyboard */; };
+		55E5C70C29928D8100F3DFA7 /* RxBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */; };
+		55E5C70E29928F4D00F3DFA7 /* RxBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */; };
+		55E5C7102992906600F3DFA7 /* ListEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70F2992906600F3DFA7 /* ListEventsView.swift */; };
 		C740BFF1A0C4B82D4ED828BB /* Pods_ListOfEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */; };
 /* End PBXBuildFile section */
 
@@ -19,10 +22,13 @@
 		559752E429926A1F000AB411 /* ListOfEvents.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListOfEvents.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		559752E729926A1F000AB411 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		559752E929926A1F000AB411 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		559752EB29926A1F000AB411 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		559752EB29926A1F000AB411 /* ListEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
 		559752F029926A20000AB411 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		559752F329926A20000AB411 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		559752F529926A20000AB411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseView.swift; sourceTree = "<group>"; };
+		55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseViewController.swift; sourceTree = "<group>"; };
+		55E5C70F2992906600F3DFA7 /* ListEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsView.swift; sourceTree = "<group>"; };
 		778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListOfEvents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F0F8F9F64A3F3A489A9492 /* Pods-ListOfEvents.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.debug.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.debug.xcconfig"; sourceTree = "<group>"; };
 		C4DF4703DE13BE69336292C9 /* Pods-ListOfEvents.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.release.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.release.xcconfig"; sourceTree = "<group>"; };
@@ -46,7 +52,6 @@
 				B8F0F8F9F64A3F3A489A9492 /* Pods-ListOfEvents.debug.xcconfig */,
 				C4DF4703DE13BE69336292C9 /* Pods-ListOfEvents.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -90,6 +95,7 @@
 		55975301299272BD000AB411 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				55E5C70A29928D6E00F3DFA7 /* Common */,
 				55975303299272E9000AB411 /* Modules */,
 				55975302299272D5000AB411 /* App */,
 			);
@@ -108,9 +114,19 @@
 		55975303299272E9000AB411 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				559752EB29926A1F000AB411 /* ViewController.swift */,
+				559752EB29926A1F000AB411 /* ListEventsViewController.swift */,
+				55E5C70F2992906600F3DFA7 /* ListEventsView.swift */,
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		55E5C70A29928D6E00F3DFA7 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */,
+				55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		CB4CB053713128CF70C619AF /* Frameworks */ = {
@@ -235,9 +251,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				559752EC29926A1F000AB411 /* ViewController.swift in Sources */,
+				559752EC29926A1F000AB411 /* ListEventsViewController.swift in Sources */,
+				55E5C7102992906600F3DFA7 /* ListEventsView.swift in Sources */,
 				559752E829926A1F000AB411 /* AppDelegate.swift in Sources */,
 				559752EA29926A1F000AB411 /* SceneDelegate.swift in Sources */,
+				55E5C70C29928D8100F3DFA7 /* RxBaseView.swift in Sources */,
+				55E5C70E29928F4D00F3DFA7 /* RxBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

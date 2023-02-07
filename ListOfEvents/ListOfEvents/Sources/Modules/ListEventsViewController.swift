@@ -7,12 +7,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ListEventsViewController: RxBaseViewController<PartnersView> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .yellow
     }
 }
 
