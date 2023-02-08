@@ -15,7 +15,12 @@
 		55E5C70C29928D8100F3DFA7 /* RxBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */; };
 		55E5C70E29928F4D00F3DFA7 /* RxBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */; };
 		55E5C7102992906600F3DFA7 /* ListEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C70F2992906600F3DFA7 /* ListEventsView.swift */; };
-		55E5C71329929FFD00F3DFA7 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C71229929FFD00F3DFA7 /* ListViewModel.swift */; };
+		55E5C71329929FFD00F3DFA7 /* ListEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C71229929FFD00F3DFA7 /* ListEventsViewModel.swift */; };
+		55E5C7172992A4DD00F3DFA7 /* ListEventsSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C7162992A4DD00F3DFA7 /* ListEventsSectionModel.swift */; };
+		55E5C71A2992A5AD00F3DFA7 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C7192992A5AD00F3DFA7 /* EventModel.swift */; };
+		55E5C71C2992A79300F3DFA7 /* ListEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C71B2992A79300F3DFA7 /* ListEventsCell.swift */; };
+		55E5C73E2993BE1E00F3DFA7 /* RxExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C73D2993BE1E00F3DFA7 /* RxExtension.swift */; };
+		55E5C7402993FE7000F3DFA7 /* KindSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C73F2993FE7000F3DFA7 /* KindSorting.swift */; };
 		C740BFF1A0C4B82D4ED828BB /* Pods_ListOfEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +35,12 @@
 		55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseView.swift; sourceTree = "<group>"; };
 		55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseViewController.swift; sourceTree = "<group>"; };
 		55E5C70F2992906600F3DFA7 /* ListEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsView.swift; sourceTree = "<group>"; };
-		55E5C71229929FFD00F3DFA7 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		55E5C71229929FFD00F3DFA7 /* ListEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsViewModel.swift; sourceTree = "<group>"; };
+		55E5C7162992A4DD00F3DFA7 /* ListEventsSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsSectionModel.swift; sourceTree = "<group>"; };
+		55E5C7192992A5AD00F3DFA7 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
+		55E5C71B2992A79300F3DFA7 /* ListEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListEventsCell.swift; sourceTree = "<group>"; };
+		55E5C73D2993BE1E00F3DFA7 /* RxExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxExtension.swift; sourceTree = "<group>"; };
+		55E5C73F2993FE7000F3DFA7 /* KindSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KindSorting.swift; sourceTree = "<group>"; };
 		778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListOfEvents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F0F8F9F64A3F3A489A9492 /* Pods-ListOfEvents.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.debug.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.debug.xcconfig"; sourceTree = "<group>"; };
 		C4DF4703DE13BE69336292C9 /* Pods-ListOfEvents.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.release.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,6 +107,7 @@
 		55975301299272BD000AB411 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				55E5C7182992A58F00F3DFA7 /* Models */,
 				55E5C7142992A00F00F3DFA7 /* Network */,
 				55E5C70A29928D6E00F3DFA7 /* Common */,
 				55975303299272E9000AB411 /* Modules */,
@@ -127,6 +138,7 @@
 			children = (
 				55E5C70B29928D8100F3DFA7 /* RxBaseView.swift */,
 				55E5C70D29928F4D00F3DFA7 /* RxBaseViewController.swift */,
+				55E5C73D2993BE1E00F3DFA7 /* RxExtension.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -137,7 +149,7 @@
 				55E5C7152992A05700F3DFA7 /* ListEventsConfiguration */,
 				55E5C70F2992906600F3DFA7 /* ListEventsView.swift */,
 				559752EB29926A1F000AB411 /* ListEventsViewController.swift */,
-				55E5C71229929FFD00F3DFA7 /* ListViewModel.swift */,
+				55E5C71229929FFD00F3DFA7 /* ListEventsViewModel.swift */,
 			);
 			path = ListEvents;
 			sourceTree = "<group>";
@@ -152,8 +164,19 @@
 		55E5C7152992A05700F3DFA7 /* ListEventsConfiguration */ = {
 			isa = PBXGroup;
 			children = (
+				55E5C7162992A4DD00F3DFA7 /* ListEventsSectionModel.swift */,
+				55E5C71B2992A79300F3DFA7 /* ListEventsCell.swift */,
 			);
 			path = ListEventsConfiguration;
+			sourceTree = "<group>";
+		};
+		55E5C7182992A58F00F3DFA7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				55E5C7192992A5AD00F3DFA7 /* EventModel.swift */,
+				55E5C73F2993FE7000F3DFA7 /* KindSorting.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		CB4CB053713128CF70C619AF /* Frameworks */ = {
@@ -278,12 +301,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55E5C7402993FE7000F3DFA7 /* KindSorting.swift in Sources */,
+				55E5C71C2992A79300F3DFA7 /* ListEventsCell.swift in Sources */,
 				559752EC29926A1F000AB411 /* ListEventsViewController.swift in Sources */,
+				55E5C71A2992A5AD00F3DFA7 /* EventModel.swift in Sources */,
 				55E5C7102992906600F3DFA7 /* ListEventsView.swift in Sources */,
-				55E5C71329929FFD00F3DFA7 /* ListViewModel.swift in Sources */,
+				55E5C71329929FFD00F3DFA7 /* ListEventsViewModel.swift in Sources */,
 				559752E829926A1F000AB411 /* AppDelegate.swift in Sources */,
 				559752EA29926A1F000AB411 /* SceneDelegate.swift in Sources */,
 				55E5C70C29928D8100F3DFA7 /* RxBaseView.swift in Sources */,
+				55E5C73E2993BE1E00F3DFA7 /* RxExtension.swift in Sources */,
+				55E5C7172992A4DD00F3DFA7 /* ListEventsSectionModel.swift in Sources */,
 				55E5C70E29928F4D00F3DFA7 /* RxBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

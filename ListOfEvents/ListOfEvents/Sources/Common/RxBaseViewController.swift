@@ -6,7 +6,6 @@
 //
 
 import RxSwift
-import UIKit
 
 class RxBaseViewController<View>: UIViewController where View: UIView {
 

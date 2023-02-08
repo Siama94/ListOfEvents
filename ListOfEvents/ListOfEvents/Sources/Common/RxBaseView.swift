@@ -45,6 +45,6 @@ class RxBaseView: UIView {
 
 fileprivate extension RxBaseView {
     enum Color {
-        static let backgroundColor = UIColor.gray
+        static let backgroundColor = UIColor.white
     }
 }
