@@ -10,18 +10,24 @@ import RxCocoa
 
 protocol ListEventsViewModelProtocol {
     var bindings: ListEventsViewModel.Bindings { get }
+    var commands: ListEventsViewModel.Commands { get }
+
 }
 
 extension ListEventsViewModel {
-    struct Bindings {
 
+    struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModel]>(value: [])
-
     }
 
     struct Commands {
         let sortListEvents = BehaviorRelay<KindSorting>(value: .none)
+        let openEventDetails = BehaviorRelay<EventModel?>(value: nil)
+    }
+
+    struct ModuleOutput {
+        let openEventDetails = BehaviorRelay<EventModel?>(value: nil)
     }
 }
 
@@ -30,6 +36,7 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
     var disposeBag = DisposeBag()
     var bindings = Bindings()
     var commands = Commands()
+    let moduleOutput = ModuleOutput()
 
     init() {
         loadListEvents()
@@ -43,6 +50,9 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
                 viewModel.sortListEvents(by: kindSort)
             }).disposed(by: disposeBag)
 
+        commands.openEventDetails
+            .bind(to: moduleOutput.openEventDetails)
+            .disposed(by: disposeBag)
     }
 
     
@@ -70,9 +80,9 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
 
         switch kindOfSorting {
         case .priceMax:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.amount > $1.amount})
+            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.price > $1.price})
         case .priceMin:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.amount < $1.amount})
+            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.price < $1.price})
         default:
             break
         }
@@ -87,25 +97,25 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
 extension ListEventsViewModel {
     enum Events {
         static let events: [EventModel] = [
-            EventModel(id: "0001", title: "Event 1", date: "05 August 2023", amount: 100, isPaid: false),
-            EventModel(id: "0002", title: "Event 2", date: "23 May 2023", amount: 200, isPaid: false),
-            EventModel(id: "0003", title: "Event 3", date: "12 May 2023", amount: 300, isPaid: false),
-            EventModel(id: "0004", title: "Event 4", date: "13 May 2023", amount: 400, isPaid: false),
-            EventModel(id: "0005", title: "Event 5", date: "23 May 2023", amount: 500, isPaid: false),
-            EventModel(id: "0006", title: "Event 6", date: "23 May 2023", amount: 600, isPaid: false),
-            EventModel(id: "0007", title: "Event 7", date: "23 May 2023", amount: 700, isPaid: false),
-            EventModel(id: "0008", title: "Event 8", date: "23 May 2023", amount: 800, isPaid: false),
-            EventModel(id: "0009", title: "Event 9", date: "23 May 2023", amount: 900, isPaid: false),
-            EventModel(id: "0010", title: "Event 10", date: "23 May 2023", amount: 1000, isPaid: false),
-            EventModel(id: "0011", title: "Event 11", date: "23 May 2023", amount: 1100, isPaid: false),
-            EventModel(id: "0012", title: "Event 12", date: "23 May 2023", amount: 1200, isPaid: false),
-            EventModel(id: "0013", title: "Event 13", date: "23 May 2023", amount: 1300, isPaid: false),
-            EventModel(id: "0014", title: "Event 14", date: "23 May 2023", amount: 1400, isPaid: false),
-            EventModel(id: "0015", title: "Event 15", date: "23 May 2023", amount: 1500, isPaid: false),
-            EventModel(id: "0016", title: "Event 16", date: "23 May 2023", amount: 1600, isPaid: false),
-            EventModel(id: "0017", title: "Event 17", date: "23 May 2023", amount: 1700, isPaid: false),
-            EventModel(id: "0018", title: "Event 18", date: "23 May 2023", amount: 1800, isPaid: false),
-            EventModel(id: "0019", title: "Event 19", date: "23 May 2023", amount: 1900, isPaid: false)
+            EventModel(id: "0001", title: "Event 1", date: "05 August 2023", price: 100, isPaid: false),
+            EventModel(id: "0002", title: "Event 2", date: "23 May 2023", price: 200, isPaid: false),
+            EventModel(id: "0003", title: "Event 3", date: "12 May 2023", price: 300, isPaid: false),
+            EventModel(id: "0004", title: "Event 4", date: "13 May 2023", price: 400, isPaid: false),
+            EventModel(id: "0005", title: "Event 5", date: "23 May 2023", price: 500, isPaid: false),
+            EventModel(id: "0006", title: "Event 6", date: "23 May 2023", price: 600, isPaid: false),
+            EventModel(id: "0007", title: "Event 7", date: "23 May 2023", price: 700, isPaid: false),
+            EventModel(id: "0008", title: "Event 8", date: "23 May 2023", price: 800, isPaid: false),
+            EventModel(id: "0009", title: "Event 9", date: "23 May 2023", price: 900, isPaid: false),
+            EventModel(id: "0010", title: "Event 10", date: "23 May 2023", price: 1000, isPaid: false),
+            EventModel(id: "0011", title: "Event 11", date: "23 May 2023", price: 1100, isPaid: false),
+            EventModel(id: "0012", title: "Event 12", date: "23 May 2023", price: 1200, isPaid: false),
+            EventModel(id: "0013", title: "Event 13", date: "23 May 2023", price: 1300, isPaid: false),
+            EventModel(id: "0014", title: "Event 14", date: "23 May 2023", price: 1400, isPaid: false),
+            EventModel(id: "0015", title: "Event 15", date: "23 May 2023", price: 1500, isPaid: false),
+            EventModel(id: "0016", title: "Event 16", date: "23 May 2023", price: 1600, isPaid: false),
+            EventModel(id: "0017", title: "Event 17", date: "23 May 2023", price: 1700, isPaid: false),
+            EventModel(id: "0018", title: "Event 18", date: "23 May 2023", price: 1800, isPaid: false),
+            EventModel(id: "0019", title: "Event 19", date: "23 May 2023", price: 1900, isPaid: false)
         ]
     }
 }

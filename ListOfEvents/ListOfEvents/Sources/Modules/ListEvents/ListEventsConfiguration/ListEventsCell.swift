@@ -55,7 +55,7 @@ final class ListEventsCell: UITableViewCell {
     func configureCell(from model: EventModel) {
         eventTitle.text = model.title
         dateTitle.text = model.date
-        priceTitle.text = String(model.amount) + " $"
+        priceTitle.text = String(model.price) + " $"
     }
 
     // MARK: - Settings

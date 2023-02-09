@@ -42,6 +42,13 @@ enum ListEventsItemModel: IdentifiableType, Equatable {
         }
     }
 
+    var eventItem: EventModel {
+        switch self {
+        case .event(let model):
+            return model
+        }
+    }
+
     static func == (lhs: ListEventsItemModel, rhs: ListEventsItemModel) -> Bool {
         switch (lhs, rhs) {
         case (.event(let left), .event(let right)):

@@ -11,6 +11,7 @@ import SnapKit
 import ReusableKit
 import RxDataSources
 import RxSwift
+import RxCocoa
 
 final class ListEventsView: RxBaseView {
 

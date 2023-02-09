@@ -11,7 +11,7 @@ struct EventModel: Codable, Hashable {
     let id: String
     let title: String
     let date: String
-    let amount: Double
+    let price: Double
     let isPaid: Bool
 }
 
