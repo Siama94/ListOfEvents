@@ -97,25 +97,25 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
 extension ListEventsViewModel {
     enum Events {
         static let events: [EventModel] = [
-            EventModel(id: "0001", title: "Event 1", date: "05 August 2023", price: 100, isPaid: false),
-            EventModel(id: "0002", title: "Event 2", date: "23 May 2023", price: 200, isPaid: false),
-            EventModel(id: "0003", title: "Event 3", date: "12 May 2023", price: 300, isPaid: false),
-            EventModel(id: "0004", title: "Event 4", date: "13 May 2023", price: 400, isPaid: false),
-            EventModel(id: "0005", title: "Event 5", date: "23 May 2023", price: 500, isPaid: false),
-            EventModel(id: "0006", title: "Event 6", date: "23 May 2023", price: 600, isPaid: false),
-            EventModel(id: "0007", title: "Event 7", date: "23 May 2023", price: 700, isPaid: false),
-            EventModel(id: "0008", title: "Event 8", date: "23 May 2023", price: 800, isPaid: false),
-            EventModel(id: "0009", title: "Event 9", date: "23 May 2023", price: 900, isPaid: false),
-            EventModel(id: "0010", title: "Event 10", date: "23 May 2023", price: 1000, isPaid: false),
-            EventModel(id: "0011", title: "Event 11", date: "23 May 2023", price: 1100, isPaid: false),
-            EventModel(id: "0012", title: "Event 12", date: "23 May 2023", price: 1200, isPaid: false),
-            EventModel(id: "0013", title: "Event 13", date: "23 May 2023", price: 1300, isPaid: false),
-            EventModel(id: "0014", title: "Event 14", date: "23 May 2023", price: 1400, isPaid: false),
-            EventModel(id: "0015", title: "Event 15", date: "23 May 2023", price: 1500, isPaid: false),
-            EventModel(id: "0016", title: "Event 16", date: "23 May 2023", price: 1600, isPaid: false),
-            EventModel(id: "0017", title: "Event 17", date: "23 May 2023", price: 1700, isPaid: false),
-            EventModel(id: "0018", title: "Event 18", date: "23 May 2023", price: 1800, isPaid: false),
-            EventModel(id: "0019", title: "Event 19", date: "23 May 2023", price: 1900, isPaid: false)
+            EventModel(id: "0001", title: "Event 1", date: "05 August 2023", price: 100, paymentStatus: .notPaid),
+            EventModel(id: "0002", title: "Event 2", date: "23 May 2023", price: 200, paymentStatus: .notPaid),
+            EventModel(id: "0003", title: "Event 3", date: "12 May 2023", price: 300, paymentStatus: .notPaid),
+            EventModel(id: "0004", title: "Event 4", date: "13 May 2023", price: 400, paymentStatus: .notPaid),
+            EventModel(id: "0005", title: "Event 5", date: "23 May 2023", price: 500, paymentStatus: .notPaid),
+            EventModel(id: "0006", title: "Event 6", date: "23 May 2023", price: 600, paymentStatus: .notPaid),
+            EventModel(id: "0007", title: "Event 7", date: "23 May 2023", price: 700, paymentStatus: .notPaid),
+            EventModel(id: "0008", title: "Event 8", date: "23 May 2023", price: 800, paymentStatus: .notPaid),
+            EventModel(id: "0009", title: "Event 9", date: "23 May 2023", price: 900, paymentStatus: .notPaid),
+            EventModel(id: "0010", title: "Event 10", date: "23 May 2023", price: 1000, paymentStatus: .notPaid),
+            EventModel(id: "0011", title: "Event 11", date: "23 May 2023", price: 1100, paymentStatus: .notPaid),
+            EventModel(id: "0012", title: "Event 12", date: "23 May 2023", price: 1200, paymentStatus: .notPaid),
+            EventModel(id: "0013", title: "Event 13", date: "23 May 2023", price: 1300, paymentStatus: .notPaid),
+            EventModel(id: "0014", title: "Event 14", date: "23 May 2023", price: 1400, paymentStatus: .notPaid),
+            EventModel(id: "0015", title: "Event 15", date: "23 May 2023", price: 1500, paymentStatus: .notPaid),
+            EventModel(id: "0016", title: "Event 16", date: "23 May 2023", price: 1600, paymentStatus: .notPaid),
+            EventModel(id: "0017", title: "Event 17", date: "23 May 2023", price: 1700, paymentStatus: .notPaid),
+            EventModel(id: "0018", title: "Event 18", date: "23 May 2023", price: 1800, paymentStatus: .notPaid),
+            EventModel(id: "0019", title: "Event 19", date: "23 May 2023", price: 1900, paymentStatus: .notPaid)
         ]
     }
 }

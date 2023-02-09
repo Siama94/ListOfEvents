@@ -12,7 +12,7 @@ struct EventModel: Codable, Hashable {
     let title: String
     let date: String
     let price: Double
-    let isPaid: Bool
+    let paymentStatus: PaymentStatus
 }
 
 extension Array where Element == EventModel {

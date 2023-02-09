@@ -15,5 +15,5 @@ struct EventDetailsModel: Codable, Hashable {
     let address: String
     let phone: String
     let price: Double
-    let isPaid: Bool
+    let paymentStatus: PaymentStatus
 }

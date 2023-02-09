@@ -16,17 +16,20 @@ final class EventDetailsView: RxBaseView {
     // MARK: - Configure
 
     let eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
+    var buttonPublisher = PublishSubject<EventDetailsModel>()
+    var eventItem: EventDetailsModel?
 
     func configure(from model: EventDetailsModel) {
-
-        let price = eventDetails.value?.price
+        eventItem = eventDetails.value
 
         eventTitle.text = model.title
         descriptionTitle.text = model.description
         dateTitle.text = model.date
         addresstTitle.text = model.address
         phoneTitle.text = model.phone
-        buyButton.setTitle("Buy for \(String(describing: price ?? 0)) $", for: .normal)
+
+        setButton(for: model)
+
     }
 
     // MARK: - Views
@@ -53,8 +56,6 @@ final class EventDetailsView: RxBaseView {
 
     private lazy var buyButton = UIButton().then {
         $0.titleLabel?.font = .boldSystemFont(ofSize: 17)
-        var eventDetails = eventDetails.value
-        $0.backgroundColor = .darkGray
         $0.layer.cornerRadius = 4
         $0.setTitleColor(.white, for: .normal)
     }
@@ -64,6 +65,17 @@ final class EventDetailsView: RxBaseView {
         $0.axis = .vertical
         $0.spacing = 20
         $0.distribution = .equalSpacing
+    }
+
+    private func setButton(for event: EventDetailsModel) {
+        switch event.paymentStatus {
+        case .paid:
+            buyButton.setTitle("Open ticket", for: .normal)
+            buyButton.backgroundColor = .darkGray
+        case .notPaid:
+            buyButton.setTitle("Buy for \(event.price) $", for: .normal)
+            buyButton.backgroundColor = .systemIndigo
+        }
     }
 
 
@@ -97,6 +109,12 @@ final class EventDetailsView: RxBaseView {
                 view.configure(from: eventDetails)
             }).disposed(by: disposeBag)
 
+        buyButton.rx.tap
+            .map { [unowned self] in self.eventItem }
+            .filterNil()
+            .bind(to: buttonPublisher)
+            .disposed(by: disposeBag)
+
     }
 }
 
@@ -104,6 +122,6 @@ final class EventDetailsView: RxBaseView {
 
 extension EventDetailsView {
 
-    enum Reusable {
+    enum Metric {
     }
 }
