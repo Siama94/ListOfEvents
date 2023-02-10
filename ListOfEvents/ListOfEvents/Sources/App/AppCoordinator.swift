@@ -41,8 +41,20 @@ class AppCoordinator {
     }
 
     private func presentEventDetails(for event: EventModel, from viewController: UIViewController) {
-        let viewModel = EventDetailsViewModel(with: event.id)
-        let eventDetailsViewController = EventDetailsViewController(viewModel: viewModel)
+        let eventDetailsViewModel = EventDetailsViewModel(with: event.id)
+        let eventDetailsViewController = EventDetailsViewController(viewModel: eventDetailsViewModel)
         viewController.show(eventDetailsViewController, sender: nil)
+
+        eventDetailsViewModel.moduleOutput.getTicket
+            .filterNil()
+            .subscribe(onNext: { [weak self] model in
+                self?.presentEventTicket(for: model, from: eventDetailsViewController)
+        }).disposed(by: bag)
+    }
+
+    private func presentEventTicket(for event: EventDetailsModel, from viewController: UIViewController) {
+        let eventTicketViewModel = EventTicketViewModel(for: event)
+        let eventTicketViewController = EventTicketViewController(viewModel: eventTicketViewModel)
+        viewController.show(eventTicketViewController, sender: nil)
     }
 }
