@@ -35,70 +35,38 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
     var bindings = Bindings()
     var commands = Commands()
     var moduleOutput = ModuleOutput()
+    let networkManager: NetworkManagerProtocol?
 
-    init(with eventId: String) {
-        loadEventDetails(for: eventId)
+    init(for event: EventModel, with networkManager: NetworkManagerProtocol) {
+        self.networkManager = networkManager
+        networkManager.getEventDetails(for: event)
         configure(commands: commands)
     }
 
     private func configure(commands: Commands) {
 
-        commands.getTicket
-            .bind(to: Binder<EventDetailsModel>(self) { viewModel, event in
-                viewModel.getTicket(for: event)
+        networkManager?.eventDetails
+            .filterNil()
+            .subscribe(onNext: { [weak self] eventDetails in
+                self?.bindings.eventDetails.accept(eventDetails)
             }).disposed(by: disposeBag)
-    }
 
-    func loadEventDetails(for eventId: String) {
-        var request = URLRequest(url: URL(string: "https://technical-interview.excels.io/event/\(eventId)")!)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = ["key": "secret",
-                                       "value": "c8242f09751a2a5e9968a5e66b9259ca2ede3d92b0742a0ecfcab6b45adbb16ac9ebb2ebd073f3bd17d09538d97582cf7ea7c1dbbb9e1e8bf80db7262dc0923c205a0f9e626c5e37bc4e4ae99fa2e18434679631a72a497b89385095ea1e68031f543644ca579bf4f1473c71ad5dce50581e125637c72406fe5bfb437843225a847e644e3026f68764127397e86fe4ccaf33836cbbe2f46d32061388b33d18bc",
-                                       "type": "text"]
+        commands.getTicket
+            .bind(to: Binder<EventDetailsModel>(self) { [weak self] viewModel, event in
+                switch event.paymentStatus {
+                case .paid:
+                    self?.moduleOutput.getTicket.accept(event)
+                case .notPaid:
+                    self?.networkManager?.buyEventTicket(for: event)
+//                    self?.moduleOutput.getTicket.accept(a)
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            print(String(decoding: data!, as: UTF8.self))
+                }
+            }).disposed(by: disposeBag)
 
-            let eventDetail = EventDetailsModel(id: eventId,
-                                                title: eventId,
-                                                description: "description",
-                                                date: "date",
-                                                address: "address",
-                                                phone: "phone",
-                                                price: 100,
-                                                paymentStatus: .notPaid)
-
-            self.bindings.eventDetails.accept(eventDetail)
-        }
-
-        task.resume()
-    }
-
-    func getTicket(for event: EventDetailsModel) {
-        switch event.paymentStatus {
-        case .paid:
-            self.moduleOutput.getTicket.accept(event)
-        case .notPaid:
-            buyTicket(for: event)
-        }
-    }
-
-    func buyTicket(for event: EventDetailsModel) {
-        var request = URLRequest(url: URL(string: "https://technical-interview.excels.io/event/\(event.id)/buy")!)
-        request.httpMethod = "POST"
-        request.allHTTPHeaderFields = ["key": "secret",
-                                       "value": "c8242f09751a2a5e9968a5e66b9259ca2ede3d92b0742a0ecfcab6b45adbb16ac9ebb2ebd073f3bd17d09538d97582cf7ea7c1dbbb9e1e8bf80db7262dc0923c205a0f9e626c5e37bc4e4ae99fa2e18434679631a72a497b89385095ea1e68031f543644ca579bf4f1473c71ad5dce50581e125637c72406fe5bfb437843225a847e644e3026f68764127397e86fe4ccaf33836cbbe2f46d32061388b33d18bc",
-                                       "type": "text"]
-
-
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            print(String(decoding: data!, as: UTF8.self))
-            sleep(3)
-            DispatchQueue.main.async {
-                self.moduleOutput.getTicket.accept(event)
-            }
-        }
-        task.resume()
+//        networkManager?.getTicket
+//            .filterNil()
+//            .subscribe(onNext: { [weak self] event in
+//                self?.moduleOutput.getTicket.accept(event)
+//            }).disposed(by: disposeBag)
     }
 }

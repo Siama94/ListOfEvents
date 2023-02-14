@@ -16,5 +16,16 @@ class EventTicketViewController: RxBaseViewController<EventTicketView> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configure(viewModel: viewModel)
+    }
+
+    private func configure(viewModel: EventTicketViewModelProtocol?) {
+
+        guard let viewModel = viewModel else { return }
+
+        viewModel.bindings.eventTicket
+            .filterNil()
+            .bind(to: contentView.eventTicket)
+            .disposed(by: disposeBag)
     }
 }

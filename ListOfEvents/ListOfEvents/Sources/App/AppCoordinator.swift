@@ -15,9 +15,11 @@ class AppCoordinator {
 
     var rootViewController: UINavigationController?
     let window: UIWindow?
+    var networkManager: NetworkManagerProtocol!
 
     init(window: UIWindow?) {
         self.window = window
+        self.networkManager = NetworkManager()
     }
 
     func start() {
@@ -28,7 +30,7 @@ class AppCoordinator {
     }
 
     private func presentListEventsViewController() -> ListEventsViewController {
-        let listEventsViewModel = ListEventsViewModel()
+        let listEventsViewModel = ListEventsViewModel(networkManager: networkManager)
         let listEventsViewController = ListEventsViewController(viewModel: listEventsViewModel)
 
         listEventsViewModel.moduleOutput.openEventDetails
@@ -41,7 +43,7 @@ class AppCoordinator {
     }
 
     private func presentEventDetails(for event: EventModel, from viewController: UIViewController) {
-        let eventDetailsViewModel = EventDetailsViewModel(with: event.id)
+        let eventDetailsViewModel = EventDetailsViewModel(for: event, with: networkManager)
         let eventDetailsViewController = EventDetailsViewController(viewModel: eventDetailsViewModel)
         viewController.show(eventDetailsViewController, sender: nil)
 
