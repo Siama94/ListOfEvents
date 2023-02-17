@@ -8,11 +8,11 @@
 import Foundation
 
 struct EventModel: Codable, Hashable {
-    let id: String
-    let title: String
-    let date: String
-    let price: Double
-    let paymentStatus: PaymentStatus
+    var id: String
+    var title: String
+    var date: String
+    var price: Double
+    var paymentStatus: PaymentStatus
 }
 
 extension Array where Element == EventModel {

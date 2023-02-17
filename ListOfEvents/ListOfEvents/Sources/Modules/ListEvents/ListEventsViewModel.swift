@@ -46,25 +46,24 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
     }
 
     private func configure(commands: Commands) {
-
+        
         networkManager?.listEventsItems
             .filterNil()
             .subscribe(onNext: { [weak self] events in
                 self?.bindings.listEventsSection.accept(events.mapToListEventsSections())
                 self?.bindings.listEventsItems.accept(events)
             }).disposed(by: disposeBag)
-
-
+        
+        
         commands.sortListEvents
             .bind(to: Binder<KindSorting>(self) { [weak self] viewModel, kindSort in
                 self?.sortListEvents(by: kindSort)
             }).disposed(by: disposeBag)
-
+        
         commands.openEventDetails
             .bind(to: moduleOutput.openEventDetails)
             .disposed(by: disposeBag)
     }
-
     
     // MARK: - Methods
 

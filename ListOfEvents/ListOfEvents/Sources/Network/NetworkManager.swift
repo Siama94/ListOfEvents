@@ -21,6 +21,7 @@ protocol NetworkManagerProtocol {
 }
 
 class NetworkManager: NetworkManagerProtocol {
+
     var listEventsItems = BehaviorRelay<[EventModel]?>(value: nil)
     var eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
     var getTicket = BehaviorRelay<EventDetailsModel?>(value: nil)
@@ -36,7 +37,7 @@ class NetworkManager: NetworkManagerProtocol {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
 
-            self.listEventsItems.accept(Events.events)
+            self.listEventsItems.accept(EventStorage.storageEventModel)
 
         }
 
@@ -53,9 +54,9 @@ class NetworkManager: NetworkManagerProtocol {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
 
-            let eventDetails = EventDetailsModel(id: event.id, title: event.title, description: "", date: "", address: "", phone: "", price: 12, paymentStatus: .paid)
+            let eventD = EventDetailsModel(from: event)
 
-            self.eventDetails.accept(eventDetails)//(Events.eventDetails)
+            self.eventDetails.accept(eventD)
         }
 
         task.resume()
@@ -73,22 +74,24 @@ class NetworkManager: NetworkManagerProtocol {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
             print("vvvvvvvvvvvvvvvvvvvvvvvvvv")
-//            sleep(3)
+
             DispatchQueue.main.async {
+                let ind = EventStorage.storageEventModel.firstIndex(where: { $0.id == event.id }) ?? 0
+                EventStorage.storageEventModel[ind].paymentStatus = .paid
+                EventStorage.storageEventDetailsModel[ind].paymentStatus = .paid
+
+                self.getTicket.accept(EventStorage.storageEventDetailsModel[ind])
+                sleep(1)
+                self.getTicket.accept(nil)
+
             }
         }
         task.resume()
     }
 }
 
-
-
-
-
-// Temp.
-
-enum Events {
-    static let events: [EventModel] = [
+class EventStorage {
+     static var storageEventModel: [EventModel] = [
         EventModel(id: "0001", title: "Event 1", date: "05 August 2023", price: 100, paymentStatus: .notPaid),
         EventModel(id: "0002", title: "Event 2", date: "23 May 2023", price: 200, paymentStatus: .notPaid),
         EventModel(id: "0003", title: "Event 3", date: "12 May 2023", price: 300, paymentStatus: .notPaid),
@@ -110,13 +113,17 @@ enum Events {
         EventModel(id: "0019", title: "Event 19", date: "23 May 2023", price: 1900, paymentStatus: .notPaid)
     ]
 
-    static let eventDetails = EventDetailsModel(id: "eventId",
-                                        title: "eventId",
-                                        description: "description",
-                                        date: "date",
-                                        address: "address",
-                                        phone: "phone",
-                                        price: 100,
-                                        paymentStatus: .paid)
-}
+    static var storageEventDetailsModel: [EventDetailsModel] {
 
+        get { var storage = [EventDetailsModel]()
+
+            for i in storageEventModel {
+                let a = EventDetailsModel(from: i)
+                storage.append(a)
+            }
+            return storage
+        }
+        set { print("new status") }
+
+    }
+}

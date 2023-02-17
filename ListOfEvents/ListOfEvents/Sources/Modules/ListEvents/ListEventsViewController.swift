@@ -40,6 +40,7 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
         guard let viewModel = viewModel else { return }
 
+
         viewModel.bindings.listEventsSection
             .bind(to: contentView.tableView.rx.items(dataSource: contentView.dataSource))
             .disposed(by: disposeBag)

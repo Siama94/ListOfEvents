@@ -23,6 +23,11 @@ class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
         configure(viewModel: viewModel)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.commands.updateStatus.accept(())
+    }
+
     private func configure(viewModel: EventDetailsViewModelProtocol?) {
 
         guard let viewModel = viewModel else { return }
