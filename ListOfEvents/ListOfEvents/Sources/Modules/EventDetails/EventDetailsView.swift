@@ -23,10 +23,12 @@ final class EventDetailsView: RxBaseView {
         eventItem = eventDetails.value
 
         eventTitle.text = model.event
-        descriptionTitle.text = model.description
-        dateTitle.text = model.date
+        descriptionTitle.text = "- " + (model.description ?? "") + "."
         addresstTitle.text = model.address
         phoneTitle.text = model.phone
+
+        let date = model.date?.dateFromString
+        dateTitle.text = date?.stringFromDate
 
         setButton(for: model)
 
@@ -35,11 +37,14 @@ final class EventDetailsView: RxBaseView {
     // MARK: - Views
 
     private lazy var eventTitle = UILabel().then {
-        $0.textColor = .black
+        $0.textColor = .darkGray
+        $0.font = .boldSystemFont(ofSize: 25)
     }
 
     private lazy var descriptionTitle = UILabel().then {
         $0.textColor = .black
+        $0.lineBreakMode = .byWordWrapping
+        $0.numberOfLines = 0
     }
 
     private lazy var dateTitle = UILabel().then {
@@ -60,13 +65,6 @@ final class EventDetailsView: RxBaseView {
         $0.setTitleColor(.white, for: .normal)
     }
 
-    private lazy var stackView = UIStackView().then {
-        $0.alignment = .center
-        $0.axis = .vertical
-        $0.spacing = 20
-        $0.distribution = .equalSpacing
-    }
-
     private func setButton(for event: EventDetailsModel) {
 //        switch event.paymentStatus {
 //        case .paid:
@@ -77,7 +75,8 @@ final class EventDetailsView: RxBaseView {
 //            buyButton.backgroundColor = .systemIndigo
 //        }
 
-        buyButton.setTitle("Buy for \(event.ticketPrice) $", for: .normal)
+        guard let price = event.ticketPrice else { return }
+        buyButton.setTitle("Buy for \(price) $", for: .normal)
         buyButton.backgroundColor = .systemIndigo
     }
 
@@ -86,21 +85,54 @@ final class EventDetailsView: RxBaseView {
 
     override func setupHierarchy() {
         super.setupHierarchy()
-        addSubview(stackView)
-        stackView.addArrangedSubview(eventTitle)
-        stackView.addArrangedSubview(descriptionTitle)
-        stackView.addArrangedSubview(dateTitle)
-        stackView.addArrangedSubview(addresstTitle)
-        stackView.addArrangedSubview(phoneTitle)
-        stackView.addArrangedSubview(buyButton)
+        addSubview(eventTitle)
+        addSubview(buyButton)
+        addSubview(descriptionTitle)
+        addSubview(dateTitle)
+        addSubview(addresstTitle)
+        addSubview(phoneTitle)
+
 
     }
 
     override func setupLayout() {
         super.setupLayout()
 
-        stackView.snp.makeConstraints {
-            $0.leading.trailing.top.equalTo(safeAreaLayoutGuide)
+//        stackView.snp.makeConstraints {
+//            $0.leading.trailing.top.equalTo(safeAreaLayoutGuide)
+//        }
+
+        eventTitle.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide)
+            $0.leading.equalToSuperview().offset(16)
+        }
+
+        buyButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(40)
+            $0.top.equalTo(eventTitle.snp.bottom).offset(16)
+        }
+
+        descriptionTitle.snp.makeConstraints {
+            $0.top.equalTo(buyButton.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+
+        dateTitle.snp.makeConstraints {
+            $0.top.equalTo(descriptionTitle.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+        }
+
+        addresstTitle.snp.makeConstraints {
+            $0.top.equalTo(dateTitle.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
+        }
+
+        phoneTitle.snp.makeConstraints {
+            $0.top.equalTo(addresstTitle.snp.bottom).offset(16)
+            $0.leading.equalToSuperview().offset(16)
         }
     }
 

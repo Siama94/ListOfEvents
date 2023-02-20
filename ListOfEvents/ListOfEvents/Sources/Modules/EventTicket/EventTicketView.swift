@@ -18,12 +18,13 @@ final class EventTicketView: RxBaseView {
     let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
 
     func configure(from model: EventTicketModel) {
-        eventTitle.text = model.date
+        let date = model.date?.dateFromString
+        dateTitle.text = "Date of payment: " + (date?.stringFromDate ?? "")
     }
 
     // MARK: - Views
 
-    private lazy var eventTitle = UILabel().then {
+    private lazy var dateTitle = UILabel().then {
         $0.textColor = .black
     }
 
@@ -31,14 +32,14 @@ final class EventTicketView: RxBaseView {
 
     override func setupHierarchy() {
         super.setupHierarchy()
-        addSubview(eventTitle)
+        addSubview(dateTitle)
     }
 
 
     override func setupLayout() {
         super.setupLayout()
 
-        eventTitle.snp.makeConstraints {
+        dateTitle.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
         }

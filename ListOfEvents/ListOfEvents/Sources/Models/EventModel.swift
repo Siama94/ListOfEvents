@@ -24,10 +24,7 @@ struct EventModelWithDate: Hashable {
         self.guid = event.guid
         self.event = event.event
         self.ticketPrice = event.ticketPrice
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ"
-        self.date = dateFormatter.date(from: event.date ?? "")
+        self.date = event.date?.dateFromString
 
     }
 }
