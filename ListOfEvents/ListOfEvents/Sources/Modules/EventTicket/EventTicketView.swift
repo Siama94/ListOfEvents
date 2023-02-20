@@ -15,10 +15,10 @@ final class EventTicketView: RxBaseView {
 
     // MARK: - Configure
 
-    let eventTicket = BehaviorRelay<EventDetailsModel?>(value: nil)
+    let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
 
-    func configure(from model: EventDetailsModel) {
-        eventTitle.text = model.event
+    func configure(from model: EventTicketModel) {
+        eventTitle.text = model.date
     }
 
     // MARK: - Views
@@ -48,7 +48,7 @@ final class EventTicketView: RxBaseView {
         super.setupBinding()
         
         eventTicket.filterNil()
-            .bind(to: Binder<EventDetailsModel>(self) { view, eventDetails in
+            .bind(to: Binder<EventTicketModel>(self) { view, eventDetails in
                 view.configure(from: eventDetails)
             }).disposed(by: disposeBag)
     }

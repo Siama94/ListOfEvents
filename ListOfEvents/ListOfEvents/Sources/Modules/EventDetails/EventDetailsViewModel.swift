@@ -26,7 +26,7 @@ extension EventDetailsViewModel {
     }
 
     struct ModuleOutput {
-        let getTicket = BehaviorRelay<EventDetailsModel?>(value: nil)
+        let openTicket = BehaviorRelay<EventTicketModel?>(value: nil)
     }
 }
 
@@ -60,12 +60,14 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
 //                case .notPaid:
 //                    self?.networkManager?.buyEventTicket(for: event)
 //                }
+
+                self?.networkManager?.buyEventTicket(for: event)
             }).disposed(by: disposeBag)
 
-        networkManager?.getTicket
+        networkManager?.openTicket
             .filterNil()
             .subscribe(onNext: { [weak self] event in
-                self?.moduleOutput.getTicket.accept(event)
+                self?.moduleOutput.openTicket.accept(event)
             }).disposed(by: disposeBag)
 
         commands.updateStatus

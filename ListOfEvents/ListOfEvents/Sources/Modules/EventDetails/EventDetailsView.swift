@@ -76,6 +76,9 @@ final class EventDetailsView: RxBaseView {
 //            buyButton.setTitle("Buy for \(event.price) $", for: .normal)
 //            buyButton.backgroundColor = .systemIndigo
 //        }
+
+        buyButton.setTitle("Buy for \(event.ticketPrice) $", for: .normal)
+        buyButton.backgroundColor = .systemIndigo
     }
 
 

@@ -16,7 +16,7 @@ protocol EventTicketViewModelProtocol {
 extension EventTicketViewModel {
 
     struct Bindings {
-        let eventTicket = BehaviorRelay<EventDetailsModel?>(value: nil)
+        let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
     }
 }
 
@@ -24,7 +24,7 @@ class EventTicketViewModel: EventTicketViewModelProtocol {
     var bindings = Bindings()
 
 
-    init(for event: EventDetailsModel) {
+    init(for event: EventTicketModel) {
         bindings.eventTicket.accept(event)
     }
 
