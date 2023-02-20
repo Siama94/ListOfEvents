@@ -23,11 +23,11 @@ extension ListEventsViewModel {
 
     struct Commands {
         let sortListEvents = BehaviorRelay<KindSorting>(value: .none)
-        let openEventDetails = BehaviorRelay<EventModel?>(value: nil)
+        let openEventDetails = BehaviorRelay<String?>(value: nil)
     }
 
     struct ModuleOutput {
-        let openEventDetails = BehaviorRelay<EventModel?>(value: nil)
+        let openEventDetails = BehaviorRelay<String?>(value: nil)
     }
 }
 

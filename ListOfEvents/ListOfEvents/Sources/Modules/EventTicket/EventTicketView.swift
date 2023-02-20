@@ -18,7 +18,7 @@ final class EventTicketView: RxBaseView {
     let eventTicket = BehaviorRelay<EventDetailsModel?>(value: nil)
 
     func configure(from model: EventDetailsModel) {
-        eventTitle.text = model.title
+        eventTitle.text = model.event
     }
 
     // MARK: - Views

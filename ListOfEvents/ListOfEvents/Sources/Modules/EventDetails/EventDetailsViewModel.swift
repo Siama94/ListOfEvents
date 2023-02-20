@@ -38,9 +38,9 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
     var moduleOutput = ModuleOutput()
     let networkManager: NetworkManagerProtocol?
 
-    init(for event: EventModel, with networkManager: NetworkManagerProtocol) {
+    init(for eventId: String, with networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
-        networkManager.getEventDetails(for: event)
+        networkManager.getEventDetails(for: eventId)
         configure(commands: commands)
     }
 
@@ -54,13 +54,12 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
 
         commands.getTicket
             .bind(to: Binder<EventDetailsModel>(self) { [weak self] viewModel, event in
-                print(event.paymentStatus)
-                switch event.paymentStatus {
-                case .paid:
-                    self?.moduleOutput.getTicket.accept(event)
-                case .notPaid:
-                    self?.networkManager?.buyEventTicket(for: event)
-                }
+//                switch event.paymentStatus {
+//                case .paid:
+//                    self?.moduleOutput.getTicket.accept(event)
+//                case .notPaid:
+//                    self?.networkManager?.buyEventTicket(for: event)
+//                }
             }).disposed(by: disposeBag)
 
         networkManager?.getTicket

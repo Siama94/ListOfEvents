@@ -35,15 +35,15 @@ class AppCoordinator {
 
         listEventsViewModel.moduleOutput.openEventDetails
             .filterNil()
-            .subscribe(onNext: { [weak self] model in
-                self?.presentEventDetails(for: model, from: listEventsViewController)
+            .subscribe(onNext: { [weak self] eventId in
+                self?.presentEventDetails(for: eventId, from: listEventsViewController)
         }).disposed(by: bag)
 
         return listEventsViewController
     }
 
-    private func presentEventDetails(for event: EventModel, from viewController: UIViewController) {
-        let eventDetailsViewModel = EventDetailsViewModel(for: event, with: networkManager)
+    private func presentEventDetails(for eventId: String, from viewController: UIViewController) {
+        let eventDetailsViewModel = EventDetailsViewModel(for: eventId, with: networkManager)
         let eventDetailsViewController = EventDetailsViewController(viewModel: eventDetailsViewModel)
         viewController.show(eventDetailsViewController, sender: nil)
 

@@ -8,16 +8,16 @@
 import Foundation
 
 struct EventModel: Decodable, Hashable {
-    var guid: String?
-    var event: String?
-    var ticketPrice: Double?
-    var date: String?
+    let guid: String?
+    let event: String?
+    let ticketPrice: Double?
+    let date: String?
 }
 
 struct EventModelWithDate: Hashable {
-    var guid: String?
-    var event: String?
-    var ticketPrice: Double?
+    let guid: String?
+    let event: String?
+    let ticketPrice: Double?
     var date: Date?
 
     init(from event: EventModel) {

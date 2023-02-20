@@ -22,7 +22,7 @@ final class EventDetailsView: RxBaseView {
     func configure(from model: EventDetailsModel) {
         eventItem = eventDetails.value
 
-        eventTitle.text = model.title
+        eventTitle.text = model.event
         descriptionTitle.text = model.description
         dateTitle.text = model.date
         addresstTitle.text = model.address
@@ -68,14 +68,14 @@ final class EventDetailsView: RxBaseView {
     }
 
     private func setButton(for event: EventDetailsModel) {
-        switch event.paymentStatus {
-        case .paid:
-            buyButton.setTitle("Open ticket", for: .normal)
-            buyButton.backgroundColor = .darkGray
-        case .notPaid:
-            buyButton.setTitle("Buy for \(event.price) $", for: .normal)
-            buyButton.backgroundColor = .systemIndigo
-        }
+//        switch event.paymentStatus {
+//        case .paid:
+//            buyButton.setTitle("Open ticket", for: .normal)
+//            buyButton.backgroundColor = .darkGray
+//        case .notPaid:
+//            buyButton.setTitle("Buy for \(event.price) $", for: .normal)
+//            buyButton.backgroundColor = .systemIndigo
+//        }
     }
 
 
