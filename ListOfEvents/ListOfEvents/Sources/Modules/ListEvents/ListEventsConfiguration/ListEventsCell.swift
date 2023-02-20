@@ -52,10 +52,11 @@ final class ListEventsCell: UITableViewCell {
         return cellHeight
     }
 
-    func configureCell(from model: EventModel) {
-        eventTitle.text = model.title
-        dateTitle.text = model.date
-        priceTitle.text = String(model.price) + " $"
+    func configureCell(from model: EventModelWithDate) {
+        eventTitle.text = model.event
+        dateTitle.text = model.date?.dateInfo
+        guard let ticketPrice = model.ticketPrice else { return }
+        priceTitle.text = String(ticketPrice) + " $"
     }
 
     // MARK: - Settings

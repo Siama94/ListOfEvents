@@ -18,7 +18,7 @@ extension ListEventsViewModel {
 
     struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
-        let listEventsItems = BehaviorRelay<[EventModel]>(value: [])
+        let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
     }
 
     struct Commands {
@@ -50,8 +50,9 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
         networkManager?.listEventsItems
             .filterNil()
             .subscribe(onNext: { [weak self] events in
-                self?.bindings.listEventsSection.accept(events.mapToListEventsSections())
-                self?.bindings.listEventsItems.accept(events)
+                let eventsWithData = events.map { EventModelWithDate(from: $0) }
+                self?.bindings.listEventsSection.accept(eventsWithData.mapToListEventsSections())
+                self?.bindings.listEventsItems.accept(eventsWithData)
             }).disposed(by: disposeBag)
         
         
@@ -68,13 +69,13 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
     // MARK: - Methods
 
     func sortListEvents(by kindOfSorting: KindSorting) {
-        var sortedEvents = [EventModel]()
+        var sortedEvents = [EventModelWithDate]()
 
         switch kindOfSorting {
         case .priceMax:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.price > $1.price})
+            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
         case .priceMin:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.price < $1.price})
+            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
         default:
             break
         }

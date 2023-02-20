@@ -7,15 +7,32 @@
 
 import Foundation
 
-struct EventModel: Codable, Hashable {
-    var id: String
-    var title: String
-    var date: String
-    var price: Double
-    var paymentStatus: PaymentStatus
+struct EventModel: Decodable, Hashable {
+    var guid: String?
+    var event: String?
+    var ticketPrice: Double?
+    var date: String?
 }
 
-extension Array where Element == EventModel {
+struct EventModelWithDate: Hashable {
+    var guid: String?
+    var event: String?
+    var ticketPrice: Double?
+    var date: Date?
+
+    init(from event: EventModel) {
+        self.guid = event.guid
+        self.event = event.event
+        self.ticketPrice = event.ticketPrice
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ"
+        self.date = dateFormatter.date(from: event.date ?? "")
+
+    }
+}
+
+extension Array where Element == EventModelWithDate {
 
     func mapToListEventsSections() -> [ListEventsSectionModel] {
         guard !isEmpty else { return [] }

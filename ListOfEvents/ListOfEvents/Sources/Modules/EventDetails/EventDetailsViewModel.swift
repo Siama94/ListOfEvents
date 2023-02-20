@@ -78,8 +78,8 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
     }
 
     func getNewStatus() {
-        let event = bindings.eventDetails.value
-        guard let ind = EventStorage.storageEventDetailsModel.firstIndex(where: { $0.id == event?.id ?? ""}) else { return }
-        bindings.eventDetails.accept(EventStorage.storageEventDetailsModel[ind])
+//        let event = bindings.eventDetails.value
+//        guard let ind = EventStorage.storageEventDetailsModel.firstIndex(where: { $0.id == event?.id ?? ""}) else { return }
+//        bindings.eventDetails.accept(EventStorage.storageEventDetailsModel[ind])
     }
 }

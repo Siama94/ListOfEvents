@@ -33,16 +33,16 @@ enum ListEventsSectionModel: AnimatableSectionModelType {
 }
 
 enum ListEventsItemModel: IdentifiableType, Equatable {
-    case event(EventModel)
+    case event(EventModelWithDate)
 
     var identity: String {
         switch self {
         case .event(let model):
-            return model.id
+            return model.guid ?? ""
         }
     }
 
-    var eventItem: EventModel {
+    var eventItem: EventModelWithDate {
         switch self {
         case .event(let model):
             return model

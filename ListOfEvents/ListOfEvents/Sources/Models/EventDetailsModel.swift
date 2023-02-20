@@ -22,9 +22,9 @@ struct EventDetailsModel: Codable, Hashable {
     var price = ""
     var paymentStatus: PaymentStatus
 
-    init(from event: EventModel) {
-        self.id = event.id
-        self.title = event.title
-        self.paymentStatus = event.paymentStatus
-    }
+//    init(from event: EventModel) {
+//        self.id = event.id
+//        self.title = event.title
+//        self.paymentStatus = event.paymentStatus
+//    }
 }

@@ -51,10 +51,10 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
                 viewController.sortConfirmation()
             }).disposed(by: disposeBag)
 
-        contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
-            .subscribe(onNext: { model in
-                viewModel.commands.openEventDetails.accept(model.eventItem)
-            }).disposed(by: disposeBag)
+//        contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
+//            .subscribe(onNext: { model in
+//                viewModel.commands.openEventDetails.accept(model.eventItem)
+//            }).disposed(by: disposeBag)
     }
 
     private func sortConfirmation() {
