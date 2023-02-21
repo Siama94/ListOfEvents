@@ -14,6 +14,8 @@ struct EventModel: Decodable, Hashable {
     let date: String?
 }
 
+// TODO: - делать отдельную модель или просто дату преврашать в Date перед сортировкой и фильтрацией?
+
 struct EventModelWithDate: Hashable {
     let guid: String?
     let event: String?

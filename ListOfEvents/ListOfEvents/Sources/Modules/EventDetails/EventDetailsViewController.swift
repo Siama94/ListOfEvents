@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
+final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
 
-    var viewModel: EventDetailsViewModelProtocol?
+    private var viewModel: EventDetailsViewModelProtocol?
 
     convenience init(viewModel: EventDetailsViewModel) {
         self.init()

@@ -5,9 +5,9 @@
 //  Created by Anastasiia iOS on 09.02.2023.
 //
 
-class EventTicketViewController: RxBaseViewController<EventTicketView> {
+final class EventTicketViewController: RxBaseViewController<EventTicketView> {
 
-    var viewModel: EventTicketViewModelProtocol?
+    private var viewModel: EventTicketViewModelProtocol?
 
     convenience init(viewModel: EventTicketViewModel) {
         self.init()

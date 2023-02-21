@@ -74,8 +74,16 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
                 self?.viewModel?.commands.sortListEvents.accept(.priceMax)
         })
 
+        let dateAction = UIAlertAction(
+            title: "Date: Descending",
+            style: .default, handler: { [weak self] _ in
+                self?.viewModel?.commands.sortListEvents.accept(.date)
+        })
+
         alert.addAction(priceMinAction)
         alert.addAction(priceMaxAction)
+        alert.addAction(dateAction)
+        
         alert.addAction(UIAlertAction(title: "Cancel",
                                       style: .cancel, handler: nil))
 

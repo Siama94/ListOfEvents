@@ -76,7 +76,9 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
             sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
         case .priceMin:
             sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
-        default:
+        case .date:
+            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
+       default:
             break
         }
 

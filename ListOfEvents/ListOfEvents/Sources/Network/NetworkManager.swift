@@ -15,9 +15,9 @@ protocol NetworkManagerProtocol {
     var eventDetails: BehaviorRelay<EventDetailsModel?> { get }
     var openTicket: BehaviorRelay<EventTicketModel?> { get }
 
-
     func getListEvents()
     func getEventDetails(for eventId: String)
+    // TODO: - сделать покупку по eventId
     func buyEventTicket(for event: EventDetailsModel)
 }
 

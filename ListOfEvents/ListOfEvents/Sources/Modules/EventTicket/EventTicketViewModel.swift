@@ -20,7 +20,7 @@ extension EventTicketViewModel {
     }
 }
 
-class EventTicketViewModel: EventTicketViewModelProtocol {
+final class EventTicketViewModel: EventTicketViewModelProtocol {
     var bindings = Bindings()
 
 

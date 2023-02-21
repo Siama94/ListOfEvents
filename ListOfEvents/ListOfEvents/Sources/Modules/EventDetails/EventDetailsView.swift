@@ -91,16 +91,10 @@ final class EventDetailsView: RxBaseView {
         addSubview(dateTitle)
         addSubview(addresstTitle)
         addSubview(phoneTitle)
-
-
     }
 
     override func setupLayout() {
         super.setupLayout()
-
-//        stackView.snp.makeConstraints {
-//            $0.leading.trailing.top.equalTo(safeAreaLayoutGuide)
-//        }
 
         eventTitle.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide)
@@ -149,14 +143,13 @@ final class EventDetailsView: RxBaseView {
             .filterNil()
             .bind(to: buttonPublisher)
             .disposed(by: disposeBag)
-
     }
 }
 
 // MARK: - Constants
 
 extension EventDetailsView {
-
+    // TODO: - заполнить
     enum Metric {
     }
 }

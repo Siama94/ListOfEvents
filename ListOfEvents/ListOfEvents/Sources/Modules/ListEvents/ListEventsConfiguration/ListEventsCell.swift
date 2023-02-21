@@ -96,7 +96,7 @@ final class ListEventsCell: UITableViewCell {
 // MARK: - Constants
 
 extension ListEventsCell {
-
+    // TODO: - заполнить
     enum Metric {
     }
 }
