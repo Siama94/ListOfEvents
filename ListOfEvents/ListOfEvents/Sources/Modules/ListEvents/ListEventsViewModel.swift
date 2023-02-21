@@ -19,11 +19,11 @@ extension ListEventsViewModel {
     struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
-        let stateOfList = BehaviorRelay<StateOfList>(value: StateOfList(sort: .none, filter: .allEvents))
     }
 
     struct Commands {
         let sortListEvents = BehaviorRelay<KindSorting>(value: .none)
+        let filterListEvents = BehaviorRelay<FilterOfList>(value: .allEvents)
         let openEventDetails = BehaviorRelay<String?>(value: nil)
     }
 
@@ -55,11 +55,15 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
                 self?.bindings.listEventsSection.accept(eventsWithData.mapToListEventsSections())
                 self?.bindings.listEventsItems.accept(eventsWithData)
             }).disposed(by: disposeBag)
-        
-        
+
         commands.sortListEvents
             .bind(to: Binder<KindSorting>(self) { [weak self] viewModel, kindSort in
-                self?.sortListEvents(by: kindSort)
+                self?.filterAndSortListEvents(by: .init(sort: kindSort, filter: commands.filterListEvents.value))
+            }).disposed(by: disposeBag)
+
+        commands.filterListEvents
+            .bind(to: Binder<FilterOfList>(self) { [weak self] viewModel, kindFilter in
+                self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value, filter: kindFilter))
             }).disposed(by: disposeBag)
         
         commands.openEventDetails
@@ -69,22 +73,40 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
     
     // MARK: - Methods
 
-    func sortListEvents(by kindOfSorting: KindSorting) {
-        var sortedEvents = [EventModelWithDate]()
+    // TODO: - переписать, чтоб было читаемо
+    func filterAndSortListEvents(by state: StateOfList) {
 
-        switch kindOfSorting {
-        case .priceMax:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
-        case .priceMin:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
-        case .date:
-            sortedEvents = bindings.listEventsItems.value.sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
-       default:
+        let deafultEvents = bindings.listEventsItems.value
+        var events = [EventModelWithDate]()
+
+        switch state {
+
+        case .init(sort: .none, filter: .allEvents):
+            events = deafultEvents
+        case .init(sort: .none, filter: .upcomingEvents):
+            events = deafultEvents.filter({ $0.date ?? Date() >= Date() })
+
+        case .init(sort: .priceMax, filter: .allEvents):
+            events = deafultEvents.sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
+        case .init(sort: .priceMax, filter: .upcomingEvents):
+            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
+
+        case .init(sort: .priceMin, filter: .allEvents):
+            events = deafultEvents.sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
+        case .init(sort: .priceMin, filter: .upcomingEvents):
+            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
+
+        case .init(sort: .date, filter: .allEvents):
+            events = deafultEvents.sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
+        case .init(sort: .date, filter: .upcomingEvents):
+            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
+
+        default:
             break
         }
 
-        let sortedEventsSection = sortedEvents.mapToListEventsSections()
-        bindings.listEventsSection.accept(sortedEventsSection)
+        let eventsSection = events.mapToListEventsSections()
+        bindings.listEventsSection.accept(eventsSection)
     }
 
 }

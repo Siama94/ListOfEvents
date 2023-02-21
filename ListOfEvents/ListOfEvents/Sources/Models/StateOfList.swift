@@ -6,7 +6,7 @@
 //
 
 
-struct StateOfList {
+struct StateOfList: Equatable {
     var sort: KindSorting
     var filter: FilterOfList
 }

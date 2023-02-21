@@ -33,8 +33,6 @@
 		55E5C756299649A100F3DFA7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C755299649A100F3DFA7 /* NetworkManager.swift */; };
 		55E5C75C29A38A0300F3DFA7 /* DateExtantion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C75B29A38A0300F3DFA7 /* DateExtantion.swift */; };
 		55E5C75E29A3A4B100F3DFA7 /* EventTicketModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C75D29A3A4B100F3DFA7 /* EventTicketModel.swift */; };
-		55E5C76029A49B1F00F3DFA7 /* EventFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C75F29A49B1F00F3DFA7 /* EventFilterViewController.swift */; };
-		55E5C76329A49D5400F3DFA7 /* EventFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E5C76229A49D5400F3DFA7 /* EventFilterView.swift */; };
 		C740BFF1A0C4B82D4ED828BB /* Pods_ListOfEvents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +65,6 @@
 		55E5C755299649A100F3DFA7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		55E5C75B29A38A0300F3DFA7 /* DateExtantion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtantion.swift; sourceTree = "<group>"; };
 		55E5C75D29A3A4B100F3DFA7 /* EventTicketModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTicketModel.swift; sourceTree = "<group>"; };
-		55E5C75F29A49B1F00F3DFA7 /* EventFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilterViewController.swift; sourceTree = "<group>"; };
-		55E5C76229A49D5400F3DFA7 /* EventFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilterView.swift; sourceTree = "<group>"; };
 		778AA8E908B4B62B6F472E09 /* Pods_ListOfEvents.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ListOfEvents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F0F8F9F64A3F3A489A9492 /* Pods-ListOfEvents.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.debug.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.debug.xcconfig"; sourceTree = "<group>"; };
 		C4DF4703DE13BE69336292C9 /* Pods-ListOfEvents.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ListOfEvents.release.xcconfig"; path = "Target Support Files/Pods-ListOfEvents/Pods-ListOfEvents.release.xcconfig"; sourceTree = "<group>"; };
@@ -178,7 +174,6 @@
 		55E5C71129929FDD00F3DFA7 /* ListEvents */ = {
 			isa = PBXGroup;
 			children = (
-				55E5C76129A49D2E00F3DFA7 /* EventFilter */,
 				55E5C7152992A05700F3DFA7 /* ListEventsConfiguration */,
 				55E5C70F2992906600F3DFA7 /* ListEventsView.swift */,
 				559752EB29926A1F000AB411 /* ListEventsViewController.swift */,
@@ -234,15 +229,6 @@
 				55E5C7532995391300F3DFA7 /* EventTicketViewModel.swift */,
 			);
 			path = EventTicket;
-			sourceTree = "<group>";
-		};
-		55E5C76129A49D2E00F3DFA7 /* EventFilter */ = {
-			isa = PBXGroup;
-			children = (
-				55E5C75F29A49B1F00F3DFA7 /* EventFilterViewController.swift */,
-				55E5C76229A49D5400F3DFA7 /* EventFilterView.swift */,
-			);
-			path = EventFilter;
 			sourceTree = "<group>";
 		};
 		CB4CB053713128CF70C619AF /* Frameworks */ = {
@@ -380,11 +366,9 @@
 				55E5C71A2992A5AD00F3DFA7 /* EventModel.swift in Sources */,
 				55E5C7102992906600F3DFA7 /* ListEventsView.swift in Sources */,
 				55E5C747299500D100F3DFA7 /* EventDetailsViewController.swift in Sources */,
-				55E5C76029A49B1F00F3DFA7 /* EventFilterViewController.swift in Sources */,
 				55E5C745299500C200F3DFA7 /* EventDetailsView.swift in Sources */,
 				55E5C71329929FFD00F3DFA7 /* ListEventsViewModel.swift in Sources */,
 				559752E829926A1F000AB411 /* AppDelegate.swift in Sources */,
-				55E5C76329A49D5400F3DFA7 /* EventFilterView.swift in Sources */,
 				55E5C749299500DB00F3DFA7 /* EventDetailsViewModel.swift in Sources */,
 				55E5C7542995391300F3DFA7 /* EventTicketViewModel.swift in Sources */,
 				559752EA29926A1F000AB411 /* SceneDelegate.swift in Sources */,

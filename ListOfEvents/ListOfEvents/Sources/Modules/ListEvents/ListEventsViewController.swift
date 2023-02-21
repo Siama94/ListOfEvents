@@ -19,18 +19,34 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
     }
 
     var sortPublisher = PublishSubject<Void>()
+    var filterPublisher = PublishSubject<Void>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configure(viewModel: viewModel)
 
         title = "List of Events"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+
+        // TODO: - оформить кнопки нормально
+
+        let sortEventsButton =  UIBarButtonItem(
             image: .actions,
             style: .plain, target: nil, action: nil
         )
-        navigationItem
-            .rightBarButtonItem?.rx.tap
+
+        let filterEventsButton =  UIBarButtonItem(
+            image: .actions,
+            style: .plain, target: nil, action: nil
+        )
+
+        navigationItem.rightBarButtonItems = [sortEventsButton, filterEventsButton]
+
+        navigationItem.rightBarButtonItems?[0].rx.tap
+            .mapToVoid()
+            .bind(to: filterPublisher)
+            .disposed(by: disposeBag)
+
+        navigationItem.rightBarButtonItems?[1].rx.tap
             .mapToVoid()
             .bind(to: sortPublisher)
             .disposed(by: disposeBag)
@@ -49,6 +65,12 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
             .mapToVoid()
             .bind(to: Binder<Void>(self) { viewController, _ in
                 viewController.sortConfirmation()
+            }).disposed(by: disposeBag)
+
+        filterPublisher
+            .mapToVoid()
+            .bind(to: Binder<Void>(self) { viewController, _ in
+                viewController.filterConfirmation()
             }).disposed(by: disposeBag)
 
         contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
@@ -84,6 +106,32 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
         alert.addAction(priceMaxAction)
         alert.addAction(dateAction)
         
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .cancel, handler: nil))
+
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func filterConfirmation() {
+        let alert = UIAlertController(title: "Filter events",
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
+
+        let allEventsAction = UIAlertAction(
+            title: "All Events",
+            style: .default, handler: { [weak self] _ in
+                self?.viewModel?.commands.filterListEvents.accept(.allEvents)
+        })
+
+        let upcomingEventsAction = UIAlertAction(
+            title: "Only Upcoming Events",
+            style: .default, handler: { [weak self] _ in
+                self?.viewModel?.commands.filterListEvents.accept(.upcomingEvents)
+        })
+
+        alert.addAction(allEventsAction)
+        alert.addAction(upcomingEventsAction)
+
         alert.addAction(UIAlertAction(title: "Cancel",
                                       style: .cancel, handler: nil))
 
