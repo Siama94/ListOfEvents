@@ -11,7 +11,7 @@ import RxCocoa
 
 class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
-    var viewModel: ListEventsViewModelProtocol?
+    private var viewModel: ListEventsViewModelProtocol?
 
     convenience init(viewModel: ListEventsViewModelProtocol) {
         self.init()

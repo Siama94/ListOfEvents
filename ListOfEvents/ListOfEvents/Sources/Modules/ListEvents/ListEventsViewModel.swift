@@ -19,6 +19,7 @@ extension ListEventsViewModel {
     struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
+        let stateOfList = BehaviorRelay<StateOfList>(value: StateOfList(sort: .none, filter: .allEvents))
     }
 
     struct Commands {
