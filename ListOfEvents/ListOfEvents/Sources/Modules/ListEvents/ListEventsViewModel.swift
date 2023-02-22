@@ -11,7 +11,6 @@ import RxCocoa
 protocol ListEventsViewModelProtocol {
     var bindings: ListEventsViewModel.Bindings { get }
     var commands: ListEventsViewModel.Commands { get }
-
 }
 
 extension ListEventsViewModel {
@@ -19,8 +18,8 @@ extension ListEventsViewModel {
     struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
+        let networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
         let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
-        var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
     }
 
     struct Commands {
@@ -35,11 +34,13 @@ extension ListEventsViewModel {
     }
 }
 
-class ListEventsViewModel: ListEventsViewModelProtocol {
+final class ListEventsViewModel: ListEventsViewModelProtocol {
 
-    var disposeBag = DisposeBag()
-    var bindings = Bindings()
-    var commands = Commands()
+    // MARK: - Settings
+    
+    let disposeBag = DisposeBag()
+    let bindings = Bindings()
+    let commands = Commands()
     let moduleOutput = ModuleOutput()
     let networkManager: NetworkManagerProtocol?
 
@@ -47,10 +48,12 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
         self.networkManager = networkManager
         bindings.networkIndicatorPublisher.accept(true)
         networkManager.getListEvents()
-        configure(commands: commands)
+        configure(commands: commands, bindings: bindings)
     }
 
-    private func configure(commands: Commands) {
+    // MARK: - Configure
+
+    private func configure(commands: Commands, bindings: Bindings) {
         
         commands.startRefreshEvents
             .bind(to: Binder<Void?>(self) { [weak self] viewModel, _ in
@@ -60,23 +63,27 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
         networkManager?.listEventsItems
             .filterNil()
             .subscribe(onNext: { [weak self] events in
-                self?.bindings.endRefreshEvents.accept(())
+                bindings.endRefreshEvents.accept(())
                 let eventsWithData = events.map { EventModelWithDate(from: $0) }
-                self?.bindings.listEventsItems.accept(eventsWithData)
+                bindings.listEventsItems.accept(eventsWithData)
                 self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value,
-                                                        filter:  commands.filterListEvents.value))
-
-                self?.bindings.networkIndicatorPublisher.accept(false)
+                                                        filter:  commands.filterListEvents.value)
+                )
+                bindings.networkIndicatorPublisher.accept(false)
             }).disposed(by: disposeBag)
 
         commands.sortListEvents
             .bind(to: Binder<KindSorting>(self) { [weak self] viewModel, kindSort in
-                self?.filterAndSortListEvents(by: .init(sort: kindSort, filter: commands.filterListEvents.value))
+                self?.filterAndSortListEvents(by: .init(sort: kindSort,
+                                                        filter: commands.filterListEvents.value)
+                )
             }).disposed(by: disposeBag)
 
         commands.filterListEvents
             .bind(to: Binder<FilterOfList>(self) { [weak self] viewModel, kindFilter in
-                self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value, filter: kindFilter))
+                self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value,
+                                                        filter: kindFilter)
+                )
             }).disposed(by: disposeBag)
         
         commands.openEventDetails
@@ -87,7 +94,7 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
     // MARK: - Methods
 
     // TODO: - переписать, чтоб было читаемо
-    func filterAndSortListEvents(by state: StateOfList) {
+    private func filterAndSortListEvents(by state: StateOfList) {
 
         let deafultEvents = bindings.listEventsItems.value
         var events = [EventModelWithDate]()
@@ -121,5 +128,4 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
         let eventsSection = events.mapToListEventsSections()
         bindings.listEventsSection.accept(eventsSection)
     }
-
 }

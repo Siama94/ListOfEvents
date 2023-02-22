@@ -17,9 +17,11 @@ final class ListEventsView: RxBaseView {
 
     let startRefreshEvents = BehaviorRelay<Void?>(value: nil)
     let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
-    var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
+    let networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
 
-    lazy var refreshControl = UIRefreshControl()
+    // MARK: - Views
+
+    private lazy var refreshControl = UIRefreshControl()
 
     lazy var tableView = UITableView(
         frame: .zero, style: .plain
@@ -53,8 +55,8 @@ final class ListEventsView: RxBaseView {
     override func setupHierarchy() {
         super.setupHierarchy()
         addSubview(tableView)
-        tableView.addSubview(refreshControl)
         addSubview(networkIndicator)
+        tableView.addSubview(refreshControl)
     }
 
     override func setupLayout() {
@@ -89,6 +91,8 @@ final class ListEventsView: RxBaseView {
             }).disposed(by: disposeBag)
     }
 
+    // MARK: - Methods
+
     private func setNetworkIndicator(isLoading: Bool) {
         if isLoading {
             networkIndicator.startAnimating()
@@ -101,7 +105,6 @@ final class ListEventsView: RxBaseView {
 }
 
 // MARK: - UITableViewDelegate
-
 extension ListEventsView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch dataSource[indexPath] {
@@ -112,9 +115,7 @@ extension ListEventsView: UITableViewDelegate {
 }
 
 // MARK: - Constants
-
 extension ListEventsView {
-
     enum Reusable {
         static let eventCell = ReusableCell<ListEventsCell>()
     }

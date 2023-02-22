@@ -9,13 +9,17 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class AppCoordinator {
+protocol AppCoordinatorProtocol {
+    func start()
+}
+
+final class AppCoordinator: AppCoordinatorProtocol {
 
     private let bag = DisposeBag()
 
-    var rootViewController: UINavigationController?
-    let window: UIWindow?
-    var networkManager: NetworkManagerProtocol!
+    private var rootViewController: UINavigationController?
+    private let window: UIWindow?
+    private var networkManager: NetworkManagerProtocol!
 
     init(window: UIWindow?) {
         self.window = window

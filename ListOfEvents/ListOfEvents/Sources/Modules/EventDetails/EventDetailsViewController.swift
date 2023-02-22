@@ -11,6 +11,8 @@ import RxCocoa
 
 final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
 
+    // MARK: - Settings
+
     private var viewModel: EventDetailsViewModelProtocol?
 
     convenience init(viewModel: EventDetailsViewModel) {
@@ -23,10 +25,7 @@ final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
         configure(viewModel: viewModel)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel?.commands.updateStatus.accept(())
-    }
+    // MARK: - Configure
 
     private func configure(viewModel: EventDetailsViewModelProtocol?) {
 

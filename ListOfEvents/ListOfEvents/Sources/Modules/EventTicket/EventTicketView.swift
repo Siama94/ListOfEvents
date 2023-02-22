@@ -13,14 +13,14 @@ import RxCocoa
 
 final class EventTicketView: RxBaseView {
 
+    let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
+    let closeViewPublisher = PublishSubject<Void>()
+
     // MARK: - Configure
 
-    let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
-    var closeViewPublisher = PublishSubject<Void>()
-
-    func configure(from model: EventTicketModel) {
+    private func configure(from model: EventTicketModel) {
         let date = model.date?.dateFromString
-        dateTitle.text = "Date of payment: " + (date?.stringFromDate ?? "")
+        dateTitle.text = "Date of payment: " + (date?.stringFromDate ?? "unknown")
 
         // TODO: - сделать, чтоб из полной строки делался
         guard let tempString = model.verificationImage?.prefix(20) else { return }
@@ -31,7 +31,7 @@ final class EventTicketView: RxBaseView {
     // MARK: - Views
 
     private lazy var containerView = UIView().then {
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = Metric.containerViewCornerRadius
         $0.clipsToBounds = true
         $0.backgroundColor = .white
     }
@@ -63,12 +63,12 @@ final class EventTicketView: RxBaseView {
 
         containerView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(400)
+            $0.height.equalTo(Metric.containerViewHeight)
         }
 
         dateTitle.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(Metric.dateTitleTopOffset)
         }
 
         verificationQR.snp.makeConstraints {
@@ -79,11 +79,6 @@ final class EventTicketView: RxBaseView {
 
     override func setupBinding() {
         super.setupBinding()
-        
-        eventTicket.filterNil()
-            .bind(to: Binder<EventTicketModel>(self) { view, eventDetails in
-                view.configure(from: eventDetails)
-            }).disposed(by: disposeBag)
 
         let tapView = UITapGestureRecognizer()
         addGestureRecognizer(tapView)
@@ -91,20 +86,37 @@ final class EventTicketView: RxBaseView {
         tapView.rx.event.mapToVoid()
             .bind(to: closeViewPublisher)
             .disposed(by: disposeBag)
+        
+        eventTicket.filterNil()
+            .bind(to: Binder<EventTicketModel>(self) { view, eventDetails in
+                view.configure(from: eventDetails)
+            }).disposed(by: disposeBag)
     }
 
-    func generateQRCode(from string: String) -> UIImage? {
+    // MARK: - Methods
+
+    private func generateQRCode(from string: String) -> UIImage? {
         let data = string.data(using: String.Encoding.ascii)
 
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 10, y: 10)
+            let transform = CGAffineTransform(scaleX: Metric.qrCodeScale, y: Metric.qrCodeScale)
 
             if let output = filter.outputImage?.transformed(by: transform) {
                 return UIImage(ciImage: output)
             }
         }
-
         return nil
     }
 }
+
+// MARK: - Constants
+extension EventTicketView {
+    enum Metric {
+        static let containerViewCornerRadius: CGFloat = 10
+        static let containerViewHeight: CGFloat = 400
+        static let dateTitleTopOffset: CGFloat = 16
+        static let qrCodeScale: CGFloat = 10
+    }
+}
+

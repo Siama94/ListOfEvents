@@ -13,18 +13,19 @@ import RxCocoa
 
 final class EventDetailsView: RxBaseView {
 
+    let eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
+    let buttonPublisher = PublishSubject<EventDetailsModel>()
+    let networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
+
     // MARK: - Configure
 
-    let eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
-    var buttonPublisher = PublishSubject<EventDetailsModel>()
-    var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
-    var eventItem: EventDetailsModel?
+    private var eventItem: EventDetailsModel?
 
-    func configure(from model: EventDetailsModel) {
+    private func configure(from model: EventDetailsModel) {
         eventItem = eventDetails.value
 
         eventTitle.text = model.event
-        descriptionTitle.text = "- " + (model.description ?? "") + "."
+        descriptionTitle.text = "- " + (model.description ?? "unknown") + "."
         addresstTitle.text = model.address
         phoneTitle.text = model.phone
 
@@ -32,20 +33,18 @@ final class EventDetailsView: RxBaseView {
         dateTitle.text = date?.stringFromDate
 
         setButton(for: model)
-
     }
 
     // MARK: - Views
 
     private lazy var eventTitle = UILabel().then {
         $0.textColor = .darkGray
-        $0.font = .boldSystemFont(ofSize: 25)
+        $0.font = .boldSystemFont(ofSize: Metric.eventTitleFontSize)
     }
 
     private lazy var descriptionTitle = UILabel().then {
-        $0.textColor = .black
         $0.lineBreakMode = .byWordWrapping
-        $0.numberOfLines = 0
+        $0.numberOfLines = Metric.descriptionNumberOfLines
     }
 
     private lazy var dateTitle = UILabel().then {
@@ -61,7 +60,7 @@ final class EventDetailsView: RxBaseView {
     }
 
     private lazy var payButton = UIButton().then {
-        $0.titleLabel?.font = .boldSystemFont(ofSize: 17)
+        $0.titleLabel?.font = .boldSystemFont(ofSize: Metric.payButtonFontSize)
         $0.layer.cornerRadius = 4
         $0.setTitleColor(.white, for: .normal)
     }
@@ -69,6 +68,8 @@ final class EventDetailsView: RxBaseView {
     private lazy var networkIndicator = UIActivityIndicatorView().then {
         $0.isHidden = true
     }
+
+    // MARK: - Methods
 
     private func setButton(for event: EventDetailsModel) {
 //        switch event.paymentStatus {
@@ -114,40 +115,40 @@ final class EventDetailsView: RxBaseView {
 
         eventTitle.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide)
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
         }
 
         descriptionTitle.snp.makeConstraints {
-            $0.top.equalTo(eventTitle.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(eventTitle.snp.bottom).offset(Metric.viewOffset)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
+            $0.trailing.equalToSuperview().inset(Metric.viewOffset)
         }
 
         dateTitle.snp.makeConstraints {
-            $0.top.equalTo(descriptionTitle.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalTo(descriptionTitle.snp.bottom).offset(Metric.viewOffset)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
         }
 
         addresstTitle.snp.makeConstraints {
-            $0.top.equalTo(dateTitle.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalTo(dateTitle.snp.bottom).offset(Metric.viewOffset)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
         }
 
         phoneTitle.snp.makeConstraints {
-            $0.top.equalTo(addresstTitle.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalTo(addresstTitle.snp.bottom).offset(Metric.viewOffset)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
         }
 
         networkIndicator.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(payButton.snp.top).offset(-20)
+            $0.bottom.equalTo(payButton.snp.top).offset(Metric.networkIndicatorBottomOffset)
         }
 
         payButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().inset(16)
-            $0.height.equalTo(60)
-            $0.bottom.equalTo(safeAreaLayoutGuide).inset(30)
+            $0.leading.equalToSuperview().offset(Metric.viewOffset)
+            $0.trailing.equalToSuperview().inset(Metric.viewOffset)
+            $0.height.equalTo(Metric.payButtonHeight)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(Metric.payButtonBottomInset)
         }
     }
 
@@ -173,9 +174,14 @@ final class EventDetailsView: RxBaseView {
 }
 
 // MARK: - Constants
-
 extension EventDetailsView {
-    // TODO: - заполнить
     enum Metric {
+        static let viewOffset: CGFloat = 16
+        static let eventTitleFontSize: CGFloat = 25
+        static let descriptionNumberOfLines: Int = 0
+        static let networkIndicatorBottomOffset: CGFloat = -20
+        static let payButtonFontSize: CGFloat = 17
+        static let payButtonHeight: CGFloat = 60
+        static let payButtonBottomInset: CGFloat = 30
     }
 }

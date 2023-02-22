@@ -9,7 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ListEventsViewController: RxBaseViewController<ListEventsView> {
+final class ListEventsViewController: RxBaseViewController<ListEventsView> {
+
+    var sortPublisher = PublishSubject<Void>()
+    var filterPublisher = PublishSubject<Void>()
+
+    // MARK: - Settings
 
     private var viewModel: ListEventsViewModelProtocol?
 
@@ -18,17 +23,12 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
         self.viewModel = viewModel
     }
 
-    var sortPublisher = PublishSubject<Void>()
-    var filterPublisher = PublishSubject<Void>()
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "List of Events"
         configure(viewModel: viewModel)
 
-        title = "List of Events"
-
         // TODO: - оформить кнопки нормально
-
         let sortEventsButton =  UIBarButtonItem(
             image: UIImage(systemName: "slider.horizontal.3"),
             style: .plain, target: nil, action: nil
@@ -52,6 +52,8 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
             .disposed(by: disposeBag)
     }
 
+    // MARK: - Configure
+
     private func configure(viewModel: ListEventsViewModelProtocol?) {
 
         guard let viewModel = viewModel else { return }
@@ -60,14 +62,10 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
             .bind(to: contentView.tableView.rx.items(dataSource: contentView.dataSource))
             .disposed(by: disposeBag)
 
-        contentView.startRefreshEvents
-            .filterNil()
-            .bind(to: viewModel.commands.startRefreshEvents)
-            .disposed(by: disposeBag)
-
-        viewModel.bindings.networkIndicatorPublisher
-            .bind(to: contentView.networkIndicatorPublisher)
-            .disposed(by: disposeBag)
+        contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
+            .subscribe(onNext: { model in
+                viewModel.commands.openEventDetails.accept(model.eventItem.guid)
+            }).disposed(by: disposeBag)
 
         sortPublisher
             .mapToVoid()
@@ -81,16 +79,22 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
                 viewController.filterConfirmation()
             }).disposed(by: disposeBag)
 
-        contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
-            .subscribe(onNext: { model in
-                viewModel.commands.openEventDetails.accept(model.eventItem.guid)
-            }).disposed(by: disposeBag)
+        viewModel.bindings.networkIndicatorPublisher
+            .bind(to: contentView.networkIndicatorPublisher)
+            .disposed(by: disposeBag)
+
+        contentView.startRefreshEvents
+            .filterNil()
+            .bind(to: viewModel.commands.startRefreshEvents)
+            .disposed(by: disposeBag)
 
         viewModel.bindings.endRefreshEvents
             .bind(to: Binder<Void?>(self) { viewController, _ in
                 viewController.contentView.endRefreshEvents.accept(())
             }).disposed(by: disposeBag)
     }
+
+    // MARK: - Methods
 
     private func sortConfirmation() {
         let alert = UIAlertController(title: "Sort by",

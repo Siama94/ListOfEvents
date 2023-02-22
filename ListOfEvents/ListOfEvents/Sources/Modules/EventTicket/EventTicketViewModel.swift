@@ -10,7 +10,6 @@ import RxCocoa
 
 protocol EventTicketViewModelProtocol {
     var bindings: EventTicketViewModel.Bindings { get }
-
 }
 
 extension EventTicketViewModel {
@@ -21,13 +20,9 @@ extension EventTicketViewModel {
 }
 
 final class EventTicketViewModel: EventTicketViewModelProtocol {
-    var bindings = Bindings()
-
+    let bindings = Bindings()
 
     init(for event: EventTicketModel) {
         bindings.eventTicket.accept(event)
-    }
-
-    private func configure() {
     }
 }
