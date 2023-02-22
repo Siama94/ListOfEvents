@@ -56,9 +56,13 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
         guard let viewModel = viewModel else { return }
 
-
         viewModel.bindings.listEventsSection
             .bind(to: contentView.tableView.rx.items(dataSource: contentView.dataSource))
+            .disposed(by: disposeBag)
+
+        contentView.startRefreshEvents
+            .filterNil()
+            .bind(to: viewModel.commands.startRefreshEvents)
             .disposed(by: disposeBag)
 
         sortPublisher
@@ -76,6 +80,11 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
         contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
             .subscribe(onNext: { model in
                 viewModel.commands.openEventDetails.accept(model.eventItem.guid)
+            }).disposed(by: disposeBag)
+
+        viewModel.bindings.endRefreshEvents
+            .bind(to: Binder<Void?>(self) { viewController, _ in
+                viewController.contentView.endRefreshEvents.accept(())
             }).disposed(by: disposeBag)
     }
 

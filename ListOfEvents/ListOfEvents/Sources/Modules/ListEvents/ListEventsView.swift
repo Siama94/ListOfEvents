@@ -15,6 +15,11 @@ import RxCocoa
 
 final class ListEventsView: RxBaseView {
 
+    let startRefreshEvents = BehaviorRelay<Void?>(value: nil)
+    let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
+
+    lazy var refreshControl = UIRefreshControl()
+
     lazy var tableView = UITableView(
         frame: .zero, style: .plain
     ).then {
@@ -43,6 +48,7 @@ final class ListEventsView: RxBaseView {
     override func setupHierarchy() {
         super.setupHierarchy()
         addSubview(tableView)
+        tableView.addSubview(refreshControl)
     }
 
     override func setupLayout() {
@@ -53,6 +59,19 @@ final class ListEventsView: RxBaseView {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+    }
+
+    override func setupBinding() {
+        super.setupBinding()
+        
+        refreshControl.rx.controlEvent(.valueChanged)
+            .bind(to: startRefreshEvents)
+            .disposed(by: disposeBag)
+
+        endRefreshEvents
+            .bind(to: Binder<Void?>(self) { view, _ in
+                self.refreshControl.endRefreshing()
+            }).disposed(by: disposeBag)
     }
 }
 

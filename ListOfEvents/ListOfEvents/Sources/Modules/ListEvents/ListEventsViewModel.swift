@@ -19,12 +19,14 @@ extension ListEventsViewModel {
     struct Bindings {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
+        let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
     }
 
     struct Commands {
         let sortListEvents = BehaviorRelay<KindSorting>(value: .none)
         let filterListEvents = BehaviorRelay<FilterOfList>(value: .allEvents)
         let openEventDetails = BehaviorRelay<String?>(value: nil)
+        let startRefreshEvents = BehaviorRelay<Void?>(value: nil)
     }
 
     struct ModuleOutput {
@@ -48,12 +50,20 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
 
     private func configure(commands: Commands) {
         
+        commands.startRefreshEvents
+            .bind(to: Binder<Void?>(self) { [weak self] viewModel, _ in
+                self?.networkManager?.getListEvents()
+            }).disposed(by: disposeBag)
+
         networkManager?.listEventsItems
             .filterNil()
             .subscribe(onNext: { [weak self] events in
+                self?.bindings.endRefreshEvents.accept(())
                 let eventsWithData = events.map { EventModelWithDate(from: $0) }
-                self?.bindings.listEventsSection.accept(eventsWithData.mapToListEventsSections())
                 self?.bindings.listEventsItems.accept(eventsWithData)
+                self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value,
+                                                        filter:  commands.filterListEvents.value))
+
             }).disposed(by: disposeBag)
 
         commands.sortListEvents
