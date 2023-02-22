@@ -17,6 +17,7 @@ final class EventDetailsView: RxBaseView {
 
     let eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
     var buttonPublisher = PublishSubject<EventDetailsModel>()
+    var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
     var eventItem: EventDetailsModel?
 
     func configure(from model: EventDetailsModel) {
@@ -59,10 +60,14 @@ final class EventDetailsView: RxBaseView {
         $0.textColor = .black
     }
 
-    private lazy var buyButton = UIButton().then {
+    private lazy var payButton = UIButton().then {
         $0.titleLabel?.font = .boldSystemFont(ofSize: 17)
         $0.layer.cornerRadius = 4
         $0.setTitleColor(.white, for: .normal)
+    }
+
+    private lazy var networkIndicator = UIActivityIndicatorView().then {
+        $0.isHidden = true
     }
 
     private func setButton(for event: EventDetailsModel) {
@@ -76,8 +81,18 @@ final class EventDetailsView: RxBaseView {
 //        }
 
         guard let price = event.ticketPrice else { return }
-        buyButton.setTitle("Buy for \(price) $", for: .normal)
-        buyButton.backgroundColor = .systemIndigo
+        payButton.setTitle("Buy for \(price) $", for: .normal)
+        payButton.backgroundColor = .systemIndigo
+    }
+
+    private func setNetworkIndicator(isLoading: Bool) {
+        if isLoading {
+            networkIndicator.startAnimating()
+            networkIndicator.isHidden = false
+        } else {
+            networkIndicator.stopAnimating()
+            networkIndicator.isHidden = true
+        }
     }
 
 
@@ -86,7 +101,8 @@ final class EventDetailsView: RxBaseView {
     override func setupHierarchy() {
         super.setupHierarchy()
         addSubview(eventTitle)
-        addSubview(buyButton)
+        addSubview(networkIndicator)
+        addSubview(payButton)
         addSubview(descriptionTitle)
         addSubview(dateTitle)
         addSubview(addresstTitle)
@@ -101,7 +117,12 @@ final class EventDetailsView: RxBaseView {
             $0.leading.equalToSuperview().offset(16)
         }
 
-        buyButton.snp.makeConstraints {
+        networkIndicator.snp.makeConstraints {
+            $0.leading.equalTo(eventTitle.snp.trailing).offset(16)
+            $0.top.equalTo(safeAreaLayoutGuide)
+        }
+
+        payButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(40)
@@ -109,7 +130,7 @@ final class EventDetailsView: RxBaseView {
         }
 
         descriptionTitle.snp.makeConstraints {
-            $0.top.equalTo(buyButton.snp.bottom).offset(16)
+            $0.top.equalTo(payButton.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -138,11 +159,16 @@ final class EventDetailsView: RxBaseView {
                 view.configure(from: eventDetails)
             }).disposed(by: disposeBag)
 
-        buyButton.rx.tap
+        payButton.rx.tap
             .map { [unowned self] in self.eventItem }
             .filterNil()
             .bind(to: buttonPublisher)
             .disposed(by: disposeBag)
+
+        networkIndicatorPublisher
+            .bind(to: Binder<Bool>(self) { view, isLoading in
+                view.setNetworkIndicator(isLoading: isLoading)
+            }).disposed(by: disposeBag)
     }
 }
 

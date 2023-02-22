@@ -41,6 +41,9 @@ final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
             .bind(to: viewModel.commands.getTicket)
             .disposed(by: disposeBag)
 
+        viewModel.bindings.networkIndicatorPublisher
+            .bind(to: contentView.networkIndicatorPublisher)
+            .disposed(by: disposeBag)
     }
 }
 

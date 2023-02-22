@@ -18,6 +18,7 @@ extension EventDetailsViewModel {
 
     struct Bindings {
         let eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
+        var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
     }
 
     struct Commands {
@@ -60,13 +61,14 @@ class EventDetailsViewModel: EventDetailsViewModelProtocol {
 //                case .notPaid:
 //                    self?.networkManager?.buyEventTicket(for: event)
 //                }
-
+                self?.bindings.networkIndicatorPublisher.accept(true)
                 self?.networkManager?.buyEventTicket(for: event)
             }).disposed(by: disposeBag)
 
         networkManager?.openTicket
             .filterNil()
             .subscribe(onNext: { [weak self] event in
+                self?.bindings.networkIndicatorPublisher.accept(false)
                 self?.moduleOutput.openTicket.accept(event)
             }).disposed(by: disposeBag)
 
