@@ -20,6 +20,7 @@ extension ListEventsViewModel {
         let listEventsSection = BehaviorRelay<[ListEventsSectionModel]>(value: [])
         let listEventsItems = BehaviorRelay<[EventModelWithDate]>(value: [])
         let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
+        var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
     }
 
     struct Commands {
@@ -44,6 +45,7 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
 
     init(networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
+        bindings.networkIndicatorPublisher.accept(true)
         networkManager.getListEvents()
         configure(commands: commands)
     }
@@ -64,6 +66,7 @@ class ListEventsViewModel: ListEventsViewModelProtocol {
                 self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value,
                                                         filter:  commands.filterListEvents.value))
 
+                self?.bindings.networkIndicatorPublisher.accept(false)
             }).disposed(by: disposeBag)
 
         commands.sortListEvents

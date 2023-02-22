@@ -65,6 +65,10 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
             .bind(to: viewModel.commands.startRefreshEvents)
             .disposed(by: disposeBag)
 
+        viewModel.bindings.networkIndicatorPublisher
+            .bind(to: contentView.networkIndicatorPublisher)
+            .disposed(by: disposeBag)
+
         sortPublisher
             .mapToVoid()
             .bind(to: Binder<Void>(self) { viewController, _ in

@@ -17,6 +17,7 @@ final class ListEventsView: RxBaseView {
 
     let startRefreshEvents = BehaviorRelay<Void?>(value: nil)
     let endRefreshEvents = BehaviorRelay<Void?>(value: nil)
+    var networkIndicatorPublisher = BehaviorRelay<Bool>(value: false)
 
     lazy var refreshControl = UIRefreshControl()
 
@@ -26,6 +27,10 @@ final class ListEventsView: RxBaseView {
         $0.backgroundColor = .clear
         $0.delegate = self
         $0.register(Reusable.eventCell)
+    }
+
+    private lazy var networkIndicator = UIActivityIndicatorView().then {
+        $0.isHidden = true
     }
 
     // MARK: - Data Source
@@ -49,6 +54,7 @@ final class ListEventsView: RxBaseView {
         super.setupHierarchy()
         addSubview(tableView)
         tableView.addSubview(refreshControl)
+        addSubview(networkIndicator)
     }
 
     override func setupLayout() {
@@ -58,6 +64,10 @@ final class ListEventsView: RxBaseView {
             $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+
+        networkIndicator.snp.makeConstraints {
+            $0.centerY.centerX.equalToSuperview()
         }
     }
 
@@ -72,6 +82,21 @@ final class ListEventsView: RxBaseView {
             .bind(to: Binder<Void?>(self) { view, _ in
                 self.refreshControl.endRefreshing()
             }).disposed(by: disposeBag)
+
+        networkIndicatorPublisher
+            .bind(to: Binder<Bool>(self) { view, isLoading in
+                view.setNetworkIndicator(isLoading: isLoading)
+            }).disposed(by: disposeBag)
+    }
+
+    private func setNetworkIndicator(isLoading: Bool) {
+        if isLoading {
+            networkIndicator.startAnimating()
+            networkIndicator.isHidden = false
+        } else {
+            networkIndicator.stopAnimating()
+            networkIndicator.isHidden = true
+        }
     }
 }
 
