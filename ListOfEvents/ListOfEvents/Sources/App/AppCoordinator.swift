@@ -57,6 +57,6 @@ class AppCoordinator {
     private func presentEventTicket(for event: EventTicketModel, from viewController: UIViewController) {
         let eventTicketViewModel = EventTicketViewModel(for: event)
         let eventTicketViewController = EventTicketViewController(viewModel: eventTicketViewModel)
-        viewController.show(eventTicketViewController, sender: nil)
+        viewController.present(eventTicketViewController, animated: true, completion: nil)
     }
 }

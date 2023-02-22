@@ -5,6 +5,9 @@
 //  Created by Anastasiia iOS on 09.02.2023.
 //
 
+import RxSwift
+import RxCocoa
+
 final class EventTicketViewController: RxBaseViewController<EventTicketView> {
 
     private var viewModel: EventTicketViewModelProtocol?
@@ -27,5 +30,11 @@ final class EventTicketViewController: RxBaseViewController<EventTicketView> {
             .filterNil()
             .bind(to: contentView.eventTicket)
             .disposed(by: disposeBag)
+
+        contentView.closeViewPublisher
+            .mapToVoid()
+            .bind(to: Binder<Void>(self) { viewController, _ in
+                viewController.dismiss(animated: true)
+            }).disposed(by: disposeBag)
     }
 }

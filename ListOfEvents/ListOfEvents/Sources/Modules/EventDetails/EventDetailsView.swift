@@ -101,12 +101,12 @@ final class EventDetailsView: RxBaseView {
     override func setupHierarchy() {
         super.setupHierarchy()
         addSubview(eventTitle)
-        addSubview(networkIndicator)
-        addSubview(payButton)
         addSubview(descriptionTitle)
         addSubview(dateTitle)
         addSubview(addresstTitle)
         addSubview(phoneTitle)
+        addSubview(networkIndicator)
+        addSubview(payButton)
     }
 
     override func setupLayout() {
@@ -117,20 +117,8 @@ final class EventDetailsView: RxBaseView {
             $0.leading.equalToSuperview().offset(16)
         }
 
-        networkIndicator.snp.makeConstraints {
-            $0.leading.equalTo(eventTitle.snp.trailing).offset(16)
-            $0.top.equalTo(safeAreaLayoutGuide)
-        }
-
-        payButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().inset(16)
-            $0.height.equalTo(40)
-            $0.top.equalTo(eventTitle.snp.bottom).offset(16)
-        }
-
         descriptionTitle.snp.makeConstraints {
-            $0.top.equalTo(payButton.snp.bottom).offset(16)
+            $0.top.equalTo(eventTitle.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -148,6 +136,18 @@ final class EventDetailsView: RxBaseView {
         phoneTitle.snp.makeConstraints {
             $0.top.equalTo(addresstTitle.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(16)
+        }
+
+        networkIndicator.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(payButton.snp.top).offset(-20)
+        }
+
+        payButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(60)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(30)
         }
     }
 

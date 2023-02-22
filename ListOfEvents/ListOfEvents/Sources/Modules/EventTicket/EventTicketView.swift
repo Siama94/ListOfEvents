@@ -16,30 +16,62 @@ final class EventTicketView: RxBaseView {
     // MARK: - Configure
 
     let eventTicket = BehaviorRelay<EventTicketModel?>(value: nil)
+    var closeViewPublisher = PublishSubject<Void>()
 
     func configure(from model: EventTicketModel) {
         let date = model.date?.dateFromString
         dateTitle.text = "Date of payment: " + (date?.stringFromDate ?? "")
+
+        // TODO: - сделать, чтоб из полной строки делался
+        guard let tempString = model.verificationImage?.prefix(20) else { return }
+        let tempString2 = String(tempString)
+        verificationQR.image = generateQRCode(from: tempString2)
     }
 
     // MARK: - Views
 
+    private lazy var containerView = UIView().then {
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white
+    }
+
     private lazy var dateTitle = UILabel().then {
         $0.textColor = .black
+    }
+
+    private lazy var verificationQR = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
     }
 
     // MARK: - Settings
 
     override func setupHierarchy() {
         super.setupHierarchy()
-        addSubview(dateTitle)
+        addSubview(containerView)
+        containerView.addSubview(dateTitle)
+        containerView.addSubview(verificationQR)
     }
 
+    override func setupView() {
+        super.setupView()
+        backgroundColor = .clear
+    }
 
     override func setupLayout() {
         super.setupLayout()
 
+        containerView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(400)
+        }
+
         dateTitle.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(16)
+        }
+
+        verificationQR.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview()
         }
@@ -52,5 +84,27 @@ final class EventTicketView: RxBaseView {
             .bind(to: Binder<EventTicketModel>(self) { view, eventDetails in
                 view.configure(from: eventDetails)
             }).disposed(by: disposeBag)
+
+        let tapView = UITapGestureRecognizer()
+        addGestureRecognizer(tapView)
+
+        tapView.rx.event.mapToVoid()
+            .bind(to: closeViewPublisher)
+            .disposed(by: disposeBag)
+    }
+
+    func generateQRCode(from string: String) -> UIImage? {
+        let data = string.data(using: String.Encoding.ascii)
+
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(data, forKey: "inputMessage")
+            let transform = CGAffineTransform(scaleX: 10, y: 10)
+
+            if let output = filter.outputImage?.transformed(by: transform) {
+                return UIImage(ciImage: output)
+            }
+        }
+
+        return nil
     }
 }
