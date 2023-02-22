@@ -17,7 +17,6 @@ protocol NetworkManagerProtocol {
 
     func getListEvents()
     func getEventDetails(for eventId: String)
-    // TODO: - сделать покупку по eventId
     func buyEventTicket(for event: EventDetailsModel)
 }
 
@@ -27,50 +26,40 @@ class NetworkManager: NetworkManagerProtocol {
     var eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
     var openTicket = BehaviorRelay<EventTicketModel?>(value: nil)
 
-
     func getListEvents() {
-        var request = URLRequest(url: URL(string: "https://technical-interview.excels.io/events")!)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = ["key": "value",
-                                       "secret": "c8242f09751a2a5e9968a5e66b9259ca2ede3d92b0742a0ecfcab6b45adbb16ac9ebb2ebd073f3bd17d09538d97582cf7ea7c1dbbb9e1e8bf80db7262dc0923c205a0f9e626c5e37bc4e4ae99fa2e18434679631a72a497b89385095ea1e68031f543644ca579bf4f1473c71ad5dce50581e125637c72406fe5bfb437843225a847e644e3026f68764127397e86fe4ccaf33836cbbe2f46d32061388b33d18bc"]
-
-
+        let request = ApiType.getListEvents.request
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            // TODO: - Обработать ошибку
             if let data = data, let listEvents = try? JSONDecoder().decode([EventModel].self, from: data) {
                 self.listEventsItems.accept(listEvents)
+            } else {
+                self.listEventsItems.accept([])
             }
         }
         task.resume()
     }
 
     func getEventDetails(for eventId: String) {
-        var request = URLRequest(url: URL(string: "https://technical-interview.excels.io/event/\(eventId)")!)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = ["key": "value",
-                                       "secret": "c8242f09751a2a5e9968a5e66b9259ca2ede3d92b0742a0ecfcab6b45adbb16ac9ebb2ebd073f3bd17d09538d97582cf7ea7c1dbbb9e1e8bf80db7262dc0923c205a0f9e626c5e37bc4e4ae99fa2e18434679631a72a497b89385095ea1e68031f543644ca579bf4f1473c71ad5dce50581e125637c72406fe5bfb437843225a847e644e3026f68764127397e86fe4ccaf33836cbbe2f46d32061388b33d18bc"]
+        let request = ApiType.getEventDetails(eventId: eventId).request
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
-            // TODO: - Обработать ошибку
             if let data = data, let eventDetails = try? JSONDecoder().decode(EventDetailsModel.self, from: data) {
                 self.eventDetails.accept(eventDetails)
+                sleep(1)
+                self.eventDetails.accept(nil)
+            } else {
+                self.eventDetails.accept(nil)
             }
         }
-
         task.resume()
     }
 
     func buyEventTicket(for event: EventDetailsModel) {
         guard let eventId = event.guid else { return }
-        var request = URLRequest(url: URL(string: "https://technical-interview.excels.io/event/\(eventId)/buy")!)
-        request.httpMethod = "POST"
-        request.allHTTPHeaderFields = ["key": "value",
-                                       "secret": "c8242f09751a2a5e9968a5e66b9259ca2ede3d92b0742a0ecfcab6b45adbb16ac9ebb2ebd073f3bd17d09538d97582cf7ea7c1dbbb9e1e8bf80db7262dc0923c205a0f9e626c5e37bc4e4ae99fa2e18434679631a72a497b89385095ea1e68031f543644ca579bf4f1473c71ad5dce50581e125637c72406fe5bfb437843225a847e644e3026f68764127397e86fe4ccaf33836cbbe2f46d32061388b33d18bc"]
+        let request = ApiType.buyEventTicket(eventId: eventId).request
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
-            // TODO: - Обработать ошибку и сброс билета
             if let data = data, let eventTicket = try? JSONDecoder().decode(EventTicketModel.self, from: data) {
                 DispatchQueue.main.async {
                     self.openTicket.accept(eventTicket)
