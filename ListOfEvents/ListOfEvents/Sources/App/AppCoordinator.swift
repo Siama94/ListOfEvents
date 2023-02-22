@@ -20,7 +20,9 @@ final class AppCoordinator: AppCoordinatorProtocol {
     private var rootViewController: UINavigationController?
     private let window: UIWindow?
     private var networkManager: NetworkManagerProtocol!
-
+    
+    //Swinject, EasyDI
+    
     init(window: UIWindow?) {
         self.window = window
         self.networkManager = NetworkManager()

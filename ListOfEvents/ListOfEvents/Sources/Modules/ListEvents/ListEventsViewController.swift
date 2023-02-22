@@ -11,18 +11,22 @@ import RxCocoa
 
 final class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
-    var sortPublisher = PublishSubject<Void>()
-    var filterPublisher = PublishSubject<Void>()
+    private let sortPublisher = PublishSubject<Void>()
+    private let filterPublisher = PublishSubject<Void>()
 
     // MARK: - Settings
 
-    private var viewModel: ListEventsViewModelProtocol?
+    private let viewModel: ListEventsViewModelProtocol
 
-    convenience init(viewModel: ListEventsViewModelProtocol) {
-        self.init()
+    init(viewModel: ListEventsViewModelProtocol) {
         self.viewModel = viewModel
+        super.init()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "List of Events"
@@ -41,12 +45,12 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
         navigationItem.rightBarButtonItems = [sortEventsButton, filterEventsButton]
 
-        navigationItem.rightBarButtonItems?[0].rx.tap
+        sortEventsButton.rx.tap
             .mapToVoid()
             .bind(to: filterPublisher)
             .disposed(by: disposeBag)
 
-        navigationItem.rightBarButtonItems?[1].rx.tap
+        filterEventsButton.rx.tap
             .mapToVoid()
             .bind(to: sortPublisher)
             .disposed(by: disposeBag)
@@ -54,19 +58,18 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
     // MARK: - Configure
 
-    private func configure(viewModel: ListEventsViewModelProtocol?) {
-
-        guard let viewModel = viewModel else { return }
-
+    private func configure(viewModel: ListEventsViewModelProtocol) {
+        
         viewModel.bindings.listEventsSection
             .bind(to: contentView.tableView.rx.items(dataSource: contentView.dataSource))
             .disposed(by: disposeBag)
 
+        //
         contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
-            .subscribe(onNext: { model in
-                viewModel.commands.openEventDetails.accept(model.eventItem.guid)
+            .subscribe(onNext: { [weak self] model in
+                self?.viewModel.commands.openEventDetails.accept(model.eventItem.guid)
             }).disposed(by: disposeBag)
-
+        // view(VC) = contentView -> viewModel -> Self
         sortPublisher
             .mapToVoid()
             .bind(to: Binder<Void>(self) { viewController, _ in
@@ -104,19 +107,19 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
         let priceMinAction = UIAlertAction(
             title: "Price: Low to High",
             style: .default, handler: { [weak self] _ in
-                self?.viewModel?.commands.sortListEvents.accept(.priceMin)
+                self?.viewModel.commands.sortListEvents.accept(.priceMin)
         })
 
         let priceMaxAction = UIAlertAction(
             title: "Price: High to Low",
             style: .default, handler: { [weak self] _ in
-                self?.viewModel?.commands.sortListEvents.accept(.priceMax)
+                self?.viewModel.commands.sortListEvents.accept(.priceMax)
         })
 
         let dateAction = UIAlertAction(
             title: "Date: Descending",
             style: .default, handler: { [weak self] _ in
-                self?.viewModel?.commands.sortListEvents.accept(.date)
+                self?.viewModel.commands.sortListEvents.accept(.date)
         })
 
         alert.addAction(priceMinAction)
@@ -137,13 +140,14 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
         let allEventsAction = UIAlertAction(
             title: "All Events",
             style: .default, handler: { [weak self] _ in
-                self?.viewModel?.commands.filterListEvents.accept(.allEvents)
+                self?.viewModel.commands.filterListEvents.accept(.allEvents)
         })
 
         let upcomingEventsAction = UIAlertAction(
             title: "Only Upcoming Events",
             style: .default, handler: { [weak self] _ in
-                self?.viewModel?.commands.filterListEvents.accept(.upcomingEvents)
+//                self?.viewModel.filterUpcomingEvents()
+                self?.viewModel.commands.filterListEvents.accept(.upcomingEvents)
         })
 
         alert.addAction(allEventsAction)

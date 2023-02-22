@@ -49,6 +49,7 @@ final class ListEventsCell: UITableViewCell {
         contentView.addSubview(eventTitle)
         contentView.addSubview(dateTitle)
         contentView.addSubview(priceTitle)
+//        addSubviews(...)
     }
 
     private func setupLayout() {

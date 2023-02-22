@@ -98,10 +98,8 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
 
         let deafultEvents = bindings.listEventsItems.value
         var events = [EventModelWithDate]()
-
-        switch state {
-
-        case .init(sort: .none, filter: .allEvents):
+        switch (state.sort, state.filter) {
+        case (.none, .allEvents):
             events = deafultEvents
         case .init(sort: .none, filter: .upcomingEvents):
             events = deafultEvents.filter({ $0.date ?? Date() >= Date() })
@@ -120,7 +118,6 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
             events = deafultEvents.sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
         case .init(sort: .date, filter: .upcomingEvents):
             events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
-
         default:
             break
         }

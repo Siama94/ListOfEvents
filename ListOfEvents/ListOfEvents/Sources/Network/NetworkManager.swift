@@ -7,6 +7,7 @@
 
 import RxSwift
 import RxCocoa
+import Combine
 
 protocol NetworkManagerProtocol {
 
@@ -14,21 +15,34 @@ protocol NetworkManagerProtocol {
     var eventDetails: BehaviorRelay<EventDetailsModel?> { get }
     var openTicket: BehaviorRelay<EventTicketModel?> { get }
 
-    func getListEvents()
+    func getListEvents() //-> AnyPublisher<[EventModel]?, Never>
     func getEventDetails(for eventId: String)
     func buyEventTicket(for event: EventDetailsModel)
 }
 
 class NetworkManager: NetworkManagerProtocol {
 
+
+    // cache - умеет возвращать уже загруженные модели
+    
     var listEventsItems = BehaviorRelay<[EventModel]?>(value: nil)
     var eventDetails = BehaviorRelay<EventDetailsModel?>(value: nil)
     var openTicket = BehaviorRelay<EventTicketModel?>(value: nil)
-
+    
+    
     func getListEvents() {
         let request = ApiType.getListEvents.request
+        //URLSession.shared.dataTaskPublisher(for: <#T##URL#>)
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let listEvents = try? JSONDecoder().decode([EventModel].self, from: data) {
+//            do {
+//                try //
+//                catch {
+//
+//                }
+//            }
+            if let data = data,
+                let listEvents = try? JSONDecoder().decode([EventModel].self, from: data) {
                 self.listEventsItems.accept(listEvents)
             } else {
                 self.listEventsItems.accept([])
@@ -40,6 +54,7 @@ class NetworkManager: NetworkManagerProtocol {
     func getEventDetails(for eventId: String) {
         let request = ApiType.getEventDetails(eventId: eventId).request
 
+        // [weak self] 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))
             if let data = data, let eventDetails = try? JSONDecoder().decode(EventDetailsModel.self, from: data) {

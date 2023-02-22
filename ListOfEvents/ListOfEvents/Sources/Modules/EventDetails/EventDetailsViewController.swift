@@ -18,6 +18,8 @@ final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
     convenience init(viewModel: EventDetailsViewModel) {
         self.init()
         self.viewModel = viewModel
+//        UICollectionViewDiffableDataSource
+//        NSDiffableDataSourceSnapshot()
     }
 
     override func viewDidLoad() {
