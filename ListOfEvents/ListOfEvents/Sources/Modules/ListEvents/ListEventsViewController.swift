@@ -30,12 +30,12 @@ class ListEventsViewController: RxBaseViewController<ListEventsView> {
         // TODO: - оформить кнопки нормально
 
         let sortEventsButton =  UIBarButtonItem(
-            image: .actions,
+            image: UIImage(systemName: "slider.horizontal.3"),
             style: .plain, target: nil, action: nil
         )
 
         let filterEventsButton =  UIBarButtonItem(
-            image: .actions,
+            image: UIImage(systemName: "arrow.up.arrow.down.square"),
             style: .plain, target: nil, action: nil
         )
 
