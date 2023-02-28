@@ -45,10 +45,7 @@ final class ListEventsCell: UITableViewCell {
     }
 
     private func setupHierarchy() {
-        contentView.addSubview(eventTitle)
-        contentView.addSubview(dateTitle)
-        contentView.addSubview(priceTitle)
-//        addSubviews(...)
+        [eventTitle, dateTitle, priceTitle].forEach { addSubview($0) }
     }
 
     private func setupLayout() {
