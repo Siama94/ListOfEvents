@@ -42,15 +42,13 @@ final class EventDetailsViewModel: EventDetailsViewModelProtocol {
 
     init(for eventId: String, with networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
-        networkManager.getEventDetails(for: eventId)
-        configure(commands: commands, bindings: bindings)
+        configure(commands: commands, bindings: bindings, id: eventId)
     }
 
     // MARK: - Configure
     
-    private func configure(commands: Commands, bindings: Bindings) {
-        networkManager?.eventDetails
-            .filterNil()
+    private func configure(commands: Commands, bindings: Bindings, id: String) {
+        networkManager?.getEventDetails(for: id)
             .subscribe(onNext: { eventDetails in
                 bindings.eventDetails.accept(eventDetails)
             }).disposed(by: disposeBag)
@@ -58,15 +56,15 @@ final class EventDetailsViewModel: EventDetailsViewModelProtocol {
         commands.getTicket
             .bind(to: Binder<EventDetailsModel>(self) { [weak self] viewModel, event in
                 bindings.networkIndicatorPublisher.accept(true)
-                self?.networkManager?.buyEventTicket(for: event)
+                self?.buyEventTicket(for: event.guid)
             }).disposed(by: disposeBag)
+    }
 
-        networkManager?.openTicket
-            .filterNil()
-            .subscribe(onNext: { [weak self] event in
-                bindings.networkIndicatorPublisher.accept(false)
-                self?.moduleOutput.openTicket.accept(event)
+    private func buyEventTicket(for eventId: String) {
+        networkManager?.buyEventTicket(for: eventId)
+            .subscribe(onNext: { [weak self] eventTicket in
+                self?.bindings.networkIndicatorPublisher.accept(false)
+                self?.moduleOutput.openTicket.accept(eventTicket)
             }).disposed(by: disposeBag)
-
     }
 }

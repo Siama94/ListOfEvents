@@ -47,7 +47,7 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
     init(networkManager: NetworkManagerProtocol) {
         self.networkManager = networkManager
         bindings.networkIndicatorPublisher.accept(true)
-        networkManager.getListEvents()
+        self.getListEvents()
         configure(commands: commands, bindings: bindings)
     }
 
@@ -57,19 +57,7 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
         
         commands.startRefreshEvents
             .bind(to: Binder<Void?>(self) { [weak self] viewModel, _ in
-                self?.networkManager?.getListEvents()
-            }).disposed(by: disposeBag)
-
-        networkManager?.listEventsItems
-            .filterNil()
-            .subscribe(onNext: { [weak self] events in
-                bindings.endRefreshEvents.accept(())
-                let eventsWithData = events.map { EventModelWithDate(from: $0) }
-                bindings.listEventsItems.accept(eventsWithData)
-                self?.filterAndSortListEvents(by: .init(sort: commands.sortListEvents.value,
-                                                        filter:  commands.filterListEvents.value)
-                )
-                bindings.networkIndicatorPublisher.accept(false)
+                self?.getListEvents()
             }).disposed(by: disposeBag)
 
         commands.sortListEvents
@@ -89,6 +77,21 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
         commands.openEventDetails
             .bind(to: moduleOutput.openEventDetails)
             .disposed(by: disposeBag)
+    }
+
+    private func getListEvents() {
+        networkManager?.getListEvents()
+            .subscribe(onNext: { [weak self] events in
+                guard let self = self else { return }
+                self.bindings.endRefreshEvents.accept(())
+                let events: [EventModel] = events
+                let eventsWithData = events.map { EventModelWithDate(from: $0) }
+                self.bindings.listEventsItems.accept(eventsWithData)
+                self.filterAndSortListEvents(by: .init(sort: self.commands.sortListEvents.value,
+                                                        filter:  self.commands.filterListEvents.value)
+                )
+                self.bindings.networkIndicatorPublisher.accept(false)
+            }).disposed(by: disposeBag)
     }
     
     // MARK: - Methods
