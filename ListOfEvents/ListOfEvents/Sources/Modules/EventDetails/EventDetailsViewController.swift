@@ -13,25 +13,25 @@ final class EventDetailsViewController: RxBaseViewController<EventDetailsView> {
 
     // MARK: - Settings
 
-    private var viewModel: EventDetailsViewModelProtocol?
+    private var viewModel: EventDetailsViewModelProtocol
 
-    convenience init(viewModel: EventDetailsViewModel) {
-        self.init()
+    init(viewModel: EventDetailsViewModel) {
         self.viewModel = viewModel
-//        UICollectionViewDiffableDataSource
-//        NSDiffableDataSourceSnapshot()
+        super.init()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure(viewModel: viewModel)
+        configure()
     }
 
     // MARK: - Configure
 
-    private func configure(viewModel: EventDetailsViewModelProtocol?) {
-
-        guard let viewModel = viewModel else { return }
+    private func configure() {
 
         viewModel.bindings.eventDetails
             .filterNil()

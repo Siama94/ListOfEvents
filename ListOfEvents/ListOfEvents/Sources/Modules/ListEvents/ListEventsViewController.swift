@@ -30,9 +30,8 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "List of Events"
-        configure(viewModel: viewModel)
+        configure()//viewModel: viewModel)
 
-        // TODO: - оформить кнопки нормально
         let sortEventsButton =  UIBarButtonItem(
             image: UIImage(systemName: "slider.horizontal.3"),
             style: .plain, target: nil, action: nil
@@ -58,18 +57,17 @@ final class ListEventsViewController: RxBaseViewController<ListEventsView> {
 
     // MARK: - Configure
 
-    private func configure(viewModel: ListEventsViewModelProtocol) {
+    private func configure() {//viewModel: ListEventsViewModelProtocol) {
         
         viewModel.bindings.listEventsSection
             .bind(to: contentView.tableView.rx.items(dataSource: contentView.dataSource))
             .disposed(by: disposeBag)
 
-        //
         contentView.tableView.rx.modelSelected(ListEventsItemModel.self)
             .subscribe(onNext: { [weak self] model in
                 self?.viewModel.commands.openEventDetails.accept(model.eventItem.guid)
             }).disposed(by: disposeBag)
-        // view(VC) = contentView -> viewModel -> Self
+
         sortPublisher
             .mapToVoid()
             .bind(to: Binder<Void>(self) { viewController, _ in
