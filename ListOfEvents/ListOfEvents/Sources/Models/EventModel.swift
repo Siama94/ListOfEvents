@@ -8,23 +8,23 @@
 import Foundation
 
 struct EventModel: Decodable, Hashable {
-    let guid: String?
-    let event: String?
-    let ticketPrice: Double?
-    let date: String?
+    let guid: String
+    let event: String
+    let ticketPrice: Double
+    let date: String
 }
 
 struct EventModelWithDate: Hashable {
-    let guid: String?
-    let event: String?
-    let ticketPrice: Double?
-    var date: Date?
+    let guid: String
+    let event: String
+    let ticketPrice: Double
+    var date: Date
 
     init(from event: EventModel) {
         self.guid = event.guid
         self.event = event.event
         self.ticketPrice = event.ticketPrice
-        self.date = event.date?.dateFromString
+        self.date = event.date.dateFromString ?? Date()
     }
 }
 

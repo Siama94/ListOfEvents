@@ -69,8 +69,7 @@ class NetworkManager: NetworkManagerProtocol {
     }
 
     func buyEventTicket(for event: EventDetailsModel) {
-        guard let eventId = event.guid else { return }
-        let request = ApiType.buyEventTicket(eventId: eventId).request
+        let request = ApiType.buyEventTicket(eventId: event.guid).request
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             print(String(decoding: data!, as: UTF8.self))

@@ -25,11 +25,11 @@ final class EventDetailsView: RxBaseView {
         eventItem = eventDetails.value
 
         eventTitle.text = model.event
-        descriptionTitle.text = "- " + (model.description ?? "unknown") + "."
+        descriptionTitle.text = "- " + (model.description) + "."
         addresstTitle.text = model.address
         phoneTitle.text = model.phone
 
-        let date = model.date?.dateFromString
+        let date = model.date.dateFromString
         dateTitle.text = date?.stringFromDate
 
         setButton(for: model)
@@ -72,17 +72,7 @@ final class EventDetailsView: RxBaseView {
     // MARK: - Methods
 
     private func setButton(for event: EventDetailsModel) {
-//        switch event.paymentStatus {
-//        case .paid:
-//            buyButton.setTitle("Open ticket", for: .normal)
-//            buyButton.backgroundColor = .darkGray
-//        case .notPaid:
-//            buyButton.setTitle("Buy for \(event.price) $", for: .normal)
-//            buyButton.backgroundColor = .systemIndigo
-//        }
-
-        guard let price = event.ticketPrice else { return }
-        payButton.setTitle("Buy for \(price) $", for: .normal)
+        payButton.setTitle("Buy for \(event.ticketPrice) $", for: .normal)
         payButton.backgroundColor = .systemIndigo
     }
 

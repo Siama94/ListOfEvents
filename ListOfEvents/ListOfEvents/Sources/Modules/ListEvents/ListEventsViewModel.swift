@@ -93,33 +93,32 @@ final class ListEventsViewModel: ListEventsViewModelProtocol {
     
     // MARK: - Methods
 
-    // TODO: - переписать, чтоб было читаемо
     private func filterAndSortListEvents(by state: StateOfList) {
 
         let deafultEvents = bindings.listEventsItems.value
         var events = [EventModelWithDate]()
+
         switch (state.sort, state.filter) {
+    
         case (.none, .allEvents):
             events = deafultEvents
-        case .init(sort: .none, filter: .upcomingEvents):
-            events = deafultEvents.filter({ $0.date ?? Date() >= Date() })
+        case (.none, .upcomingEvents):
+            events = deafultEvents.filter({ $0.date >= Date() })
 
-        case .init(sort: .priceMax, filter: .allEvents):
-            events = deafultEvents.sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
-        case .init(sort: .priceMax, filter: .upcomingEvents):
-            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.ticketPrice ?? 0 > $1.ticketPrice ?? 0})
+        case (.priceMax, .allEvents):
+            events = deafultEvents.sorted(by: {$0.ticketPrice  > $1.ticketPrice})
+        case (.priceMax, .upcomingEvents):
+            events = deafultEvents.filter({ $0.date >= Date() }).sorted(by: {$0.ticketPrice > $1.ticketPrice})
 
-        case .init(sort: .priceMin, filter: .allEvents):
-            events = deafultEvents.sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
-        case .init(sort: .priceMin, filter: .upcomingEvents):
-            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.ticketPrice ?? 0 < $1.ticketPrice ?? 0})
+        case (.priceMin, .allEvents):
+            events = deafultEvents.sorted(by: {$0.ticketPrice < $1.ticketPrice})
+        case (.priceMin, .upcomingEvents):
+            events = deafultEvents.filter({ $0.date >= Date() }).sorted(by: {$0.ticketPrice < $1.ticketPrice})
 
-        case .init(sort: .date, filter: .allEvents):
-            events = deafultEvents.sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
-        case .init(sort: .date, filter: .upcomingEvents):
-            events = deafultEvents.filter({ $0.date ?? Date() >= Date() }).sorted(by: {$0.date ?? Date() > $1.date ?? Date() })
-        default:
-            break
+        case (.date, .allEvents):
+            events = deafultEvents.sorted(by: {$0.date > $1.date})
+        case (.date, .upcomingEvents):
+            events = deafultEvents.filter({ $0.date >= Date() }).sorted(by: {$0.date > $1.date})
         }
 
         let eventsSection = events.mapToListEventsSections()

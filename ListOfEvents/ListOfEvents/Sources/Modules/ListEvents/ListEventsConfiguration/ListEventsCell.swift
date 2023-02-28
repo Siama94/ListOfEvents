@@ -18,9 +18,8 @@ final class ListEventsCell: UITableViewCell {
 
     func configureCell(from model: EventModelWithDate) {
         eventTitle.text = model.event
-        dateTitle.text = model.date?.stringFromDate
-        guard let ticketPrice = model.ticketPrice else { return }
-        priceTitle.text = String(ticketPrice) + " $"
+        dateTitle.text = model.date.stringFromDate
+        priceTitle.text = String(model.ticketPrice) + " $"
     }
 
     // MARK: - Views

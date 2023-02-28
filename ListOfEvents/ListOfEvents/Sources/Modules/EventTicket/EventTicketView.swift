@@ -19,13 +19,12 @@ final class EventTicketView: RxBaseView {
     // MARK: - Configure
 
     private func configure(from model: EventTicketModel) {
-        let date = model.date?.dateFromString
+        let date = model.date.dateFromString
         dateTitle.text = "Date of payment: " + (date?.stringFromDate ?? "unknown")
 
         // TODO: - сделать, чтоб из полной строки делался
-        guard let tempString = model.verificationImage?.prefix(20) else { return }
-        let tempString2 = String(tempString)
-        verificationQR.image = generateQRCode(from: tempString2)
+        let shortCode = String(model.verificationImage.prefix(20))
+        verificationQR.image = generateQRCode(from: shortCode)
     }
 
     // MARK: - Views

@@ -8,8 +8,8 @@
 import Foundation
 
 struct EventTicketModel: Decodable, Hashable {
-    let success: Bool?
-    let ticketPrice: Double?
-    let verificationImage: String?
-    let date: String?
+    let success: Bool
+    let ticketPrice: Double
+    let verificationImage: String
+    let date: String
 }
